@@ -19,7 +19,7 @@
                     echo '<span class="bigger text-primary fw-bold fs-2">' . $number1 . '</span> ';
                     echo $number2;
                 } else if ($number1 == $number2) {
-                    echo "Suprise, you got the same number";
+                    echo "Hi, you got the same number!!";
                 } else {
                     echo $number1 . ' ';
                     echo '<span class="bigger text-secondary fw-bold fs-2">' . $number2 . '</span>';
