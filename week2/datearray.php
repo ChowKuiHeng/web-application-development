@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <h3>What is your date of birth?</h3>
+            <h3>What is your date of bih?</h3>
             <div class="col">
                 <select class="form-select form-select-lg bg-primary">
                     <option selected>Day</option>
