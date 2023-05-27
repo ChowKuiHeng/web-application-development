@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+}
+
+.month {
+    text-transform: uppercase;
+    color: #b86a34;
+}
+
+.style1 {
+    color: #0000FF;
+}
