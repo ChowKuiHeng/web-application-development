@@ -21,9 +21,14 @@
             <div class="col">
                 <select class="form-select form-select-lg bg-warning">
                     <option selected>Month</option>
-                    <?php for ($month = 1; $month <= 12; $month++) { ?>
-                        <option value="<?php echo $month; ?>"><?php echo $month; ?></option>
-                    <?php } ?>
+
+                    <?php
+                    $monthname = array("January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                    for ($m = 0; $m <= 11; $m++) {
+                        echo "<option value=\"$monthname\">$monthname[$m]</option>";
+                    }
+                    ?>
+
                 </select>
             </div>
             <div class="col">
