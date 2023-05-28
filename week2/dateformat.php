@@ -32,9 +32,11 @@ $sec = date(":s");
         <?php echo "<strong> &nbsp$date </strong>"; ?>
         <div class="style1"><?php echo "&nbsp$day"; ?></div>
     </div>
-    <?php echo $hour; ?>
-    <?php echo $min; ?>
-    <?php echo $sec; ?>
+    <div class="container">
+        <div class="color1"><?php echo $hour; ?></div>
+        <div class="color2"> <?php echo $min; ?></div>
+        <?php echo $sec; ?>
+    </div>
 
 </body>
 
