@@ -26,7 +26,7 @@
         $lastName = $_POST['lastName'];
 
         if (empty($firstName) || empty($lastName)) {
-            echo '<p style="color: red;">Please enter your name</p>';
+            echo '<p style="color: red;">Please enter your name!</p>';
         } else {
             $formattedFirstName = ucwords(strtolower($firstName));
             $formattedLastName = ucwords(strtolower($lastName));

@@ -12,10 +12,10 @@
     <h2>Question 1</h2>
     <form method="POST">
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" required><br><br>
+        <input type="text" id="firstName" name="firstName"><br><br>
 
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" required><br><br>
+        <input type="text" id="lastName" name="lastName"><br><br>
 
         <input type="submit" name="submit" value="Submit">
     </form>
