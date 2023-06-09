@@ -28,7 +28,7 @@
             for ($i = $number; $i >= 1; $i--) {
                 $sum += $i;
             }
-            $result = implode(' + ', range(1, $number)) . ' = ' . $sum;
+            $result = implode(' + ', range($number, 1)) . ' = ' . $sum;
             echo $result;
         }
     }
