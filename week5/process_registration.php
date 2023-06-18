@@ -42,14 +42,6 @@
             $errors['confirmPassword'] = "Passwords do not match.";
         }
 
-
-        if (empty($email)) {
-            $errors['email'] = "Email is required.";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = "Invalid email format.";
-        }
-
-
         if (!empty($errors)) {
             echo '<h2>Error:</h2>';
             echo '<ul>';
