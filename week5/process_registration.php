@@ -29,34 +29,6 @@
 
         $errors = array();
 
-
-        if (empty($firstName)) {
-            $errors['firstName'] = "First name is required.";
-        }
-
-
-        if (empty($lastName)) {
-            $errors['lastName'] = "Last name is required.";
-        }
-
-
-        if (empty($Day) || empty($Month) || empty($Year)) {
-            $errors[] = "Date of birth is required.";
-        } else {
-        }
-
-
-        if (empty($gender)) {
-            $errors['gender'] = "Gender is required.";
-        }
-
-
-        if (empty($username)) {
-            $errors['username'] = "Username is required.";
-        } else {
-        }
-
-
         if (empty($password)) {
             $errors['password'] = "Password is required.";
         } elseif (strlen($password) < 6) {
