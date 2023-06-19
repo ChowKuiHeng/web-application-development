@@ -63,7 +63,7 @@
                             <option value="" selected disabled>Year</option>
                             <?php
                             $currentYear = date("Y");
-                            for ($year = 1900; $year <= 2023; $year++) {
+                            for ($year = 1900; $year <= date("Y"); $year++) {
                                 echo "<option value=\"$year\">$year</option>";
                             }
                             ?>
