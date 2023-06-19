@@ -39,21 +39,10 @@
                             <option value="" selected disabled>Month</option>
                             <?php
                             $months = array(
-                                1 => "January",
-                                2 => "February",
-                                3 => "March",
-                                4 => "April",
-                                5 => "May",
-                                6 => "June",
-                                7 => "July",
-                                8 => "August",
-                                9 => "September",
-                                10 => "October",
-                                11 => "November",
-                                12 => "December"
+                                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
                             );
-                            foreach ($months as $month) {
-                                echo "<option value=\"$month\">$month</option>";
+                            foreach ($months as $x => $val) {
+                                echo "<option value='$x+1'>$val</option>";
                             }
                             ?>
                         </select>
