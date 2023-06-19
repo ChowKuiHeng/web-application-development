@@ -23,13 +23,13 @@
         </select>
         <select name="month">
             <?php
-            $months = array(
-                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-            );
+            $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
             foreach ($months as $x => $val) {
-                echo "<option value='$x+1'>$val</option>";
+                $arraymonth = $x + 1;
+                echo "<option value='$arraymonth'>$val</option>";
             }
             ?>
+
         </select>
         <select name="year">
             <?php
