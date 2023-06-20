@@ -25,7 +25,6 @@
                 echo "<option value='$arraymonth'>$month</option>";
             }
             ?>
-
         </select>
         <select name="year">
             <?php
@@ -41,9 +40,9 @@
     </form>
 
     <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['submit'])) {
         $day = $_POST["day"];
-        $months = $_POST["month"];
+        $month = $_POST["month"];
         $year = $_POST["year"];
 
         $chineseZodiac = array("Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Sheep", "Monkey", "Rooster", "Dog", "Pig");
@@ -51,12 +50,89 @@
         $zodiacIndex = ($year - 1900) % 12;
         $chineseZodiacSign = $chineseZodiac[$zodiacIndex];
 
-        echo "<h2>Results:</h2>";
-        echo "Birthday: $day $month $year<br>";
-        echo "Chinese Zodiac Sign: $chineseZodiacSign<br>";
+        if ($month == 1) {
+            if ($day <= 18) {
+                $zodiac = "Capricorn";
+            } else {
+                $zodiac = "Aquarius";
+            }
+        } else if ($month == 2) {
+            if ($day <= 15) {
+                $zodiac = "Aquarius";
+            } else {
+                $zodiac = "Pisces";
+            }
+        } else if ($month == 3) {
+            if ($day <= 11) {
+                $zodiac = "Pisces";
+            } else {
+                $zodiac = "Aries";
+            }
+        } else if ($month == 4) {
+            if ($day <= 18) {
+                $zodiac = "Aries";
+            } else {
+                $zodiac = "Taurus";
+            }
+        } else if ($month == 5) {
+            if ($day <= 13) {
+                $zodiac = "Taurus";
+            } else {
+                $zodiac = "Gemini";
+            }
+        } else if ($month == 6) {
+            if ($day <= 19) {
+                $zodiac = "Gemini";
+            } else {
+                $zodiac = "Cancer";
+            }
+        } else if ($month == 7) {
+            if ($day <= 20) {
+                $zodiac = "Cancer";
+            } else {
+                $zodiac = "Leo";
+            }
+        } else if ($month == 8) {
+            if ($day <= 9) {
+                $zodiac = "Leo";
+            } else {
+                $zodiac = "Virgo";
+            }
+        } else if ($month == 9) {
+            if ($day <= 15) {
+                $zodiac = "Virgo";
+            } else {
+                $zodiac = "Libra";
+            }
+        } else if ($month == 10) {
+            if ($day <= 30) {
+                $zodiac = "Libra";
+            } else {
+                $zodiac = "Scorpio";
+            }
+        } else if ($month == 11) {
+            if ($day <= 22) {
+                $zodiac = "Scorpio";
+            } else {
+                $zodiac = "Sagittarius";
+            }
+        } else if ($month == 12) {
+            if ($day <= 17) {
+                $zodiac = "Sagittarius";
+            } else {
+                $zodiac = "Capricorn";
+            }
+        }
+
+        if (checkdate($month, $day, $year)) {
+            echo "Your birthday is " . $day . "/" . $months[$month - 1] . "/" . $year . "<br>";
+            echo "Your Chinese Zodiac is " . $chineseZodiacSign . ".<br>";
+            echo "Your Zodiac is " . $zodiac . ".";
+        } else {
+            echo "Please select a valid date.";
+        }
     }
     ?>
-
 </body>
 
 </html>
