@@ -30,7 +30,6 @@
                 $year = $birthYear + 2000;
             }
 
-            $month = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
             $chineseZodiac = array("Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Sheep");
             // Check if the date of birth is valid
             if (checkdate($birthMonth, $birthDay, $birthYear)) {
