@@ -18,7 +18,7 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $icNumber = $_POST["ic_number"];
         $pattern = "/^[0-9]{6}-[0-9]{2}-[0-9]{4}$/";
-        $month = array('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'OGO', 'SEP', 'OCT', 'NOV', 'DEC');
+        $month = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
         if (preg_match($pattern, $icNumber)) {
             $birthMonth = substr($icNumber, 2, 2);
