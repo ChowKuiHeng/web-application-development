@@ -120,7 +120,7 @@
                         echo "<img src = 'img/aries.jpg' alt = 'Aries'>";
                     } else {
                         $zodiac = "Taurus";
-                        echo "Your Zodiac is: Taurus<br>";
+                        echo "<br>Your Zodiac is: Taurus<br>";
                         echo "<img src = 'img/taurus.jpg' alt = 'Taurus'>";
                     }
                 } else if ($birthMonth == 5) {
