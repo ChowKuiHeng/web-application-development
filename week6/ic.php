@@ -17,20 +17,18 @@
     <?php
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $icNumber = $_POST["ic_number"];
-        $icplace = substr($icNumber, 7, 2);
-        // Remove any non-digit characters from the IC number
-        $icNumber = preg_replace("/[^0-9]/", "", $icNumber);
+        $pattern = "/^[0-9]{6}-[0-9]{2}-[0-9]{4}$/";
 
-        // Check if the IC number is valid
-        if (strlen($icNumber) === 12) {
+        if (preg_match($pattern, $icNumber)) {
+            $birthMonth = substr($icNumber, 2, 2);
+            $birthDay = substr($icNumber, 4, 2);
             $birthYear = substr($icNumber, 0, 2);
+            $icplace = substr($icNumber, 7, 2);
             if ($birthYear > (date('Y') - 2000)) {
                 $year = $birthYear + 1900;
             } else {
                 $year = $birthYear + 2000;
             }
-            $birthMonth = substr($icNumber, 2, 2);
-            $birthDay = substr($icNumber, 4, 2);
 
             $month = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
             $chineseZodiac = array("Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Sheep");
