@@ -18,6 +18,7 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $icNumber = $_POST["ic_number"];
         $pattern = "/^[0-9]{6}-[0-9]{2}-[0-9]{4}$/";
+        $month = array('JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'OGO', 'SEP', 'OCT', 'NOV', 'DEC');
 
         if (preg_match($pattern, $icNumber)) {
             $birthMonth = substr($icNumber, 2, 2);
@@ -33,13 +34,12 @@
             $chineseZodiac = array("Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Sheep");
             // Check if the date of birth is valid
             if (checkdate($birthMonth, $birthDay, $birthYear)) {
-                $formattedDate = date("M d, Y", strtotime("$year-$birthMonth-$birthDay"));
-
+                $imonth = $birthMonth - 1;
                 // Chinese Zodiac
                 $chineseYear = $year % 12;
                 $chineseName = "";
                 $chineseZodiacSign = $chineseZodiac[$chineseYear];
-                echo "<br>Date of Birth: $formattedDate";
+                echo "<br>Date of Birth: " . $month[$imonth] . " " . $birthDay . ", " . $year;
                 echo "<br>Your Chinese Zodiac is " . "$chineseName <br>";
                 if ($chineseYear === 0) {
                     $chineseName = "Monkey";
