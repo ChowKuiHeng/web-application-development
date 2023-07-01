@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>PDO - Create a Record - PHP CRUD Tutorial</title>
+    <title>Product Create</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
@@ -40,17 +40,13 @@
             <h1>Create Product</h1>
         </div>
 
-        <!-- HTML form to create product will be here -->
         <!-- PHP insert code will be here -->
         <?php
+        // include database connection
+        include 'config/database.php';
+
         if ($_POST) {
-            // include database connection
-            include 'config/database.php';
             try {
-                // insert query
-                $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created,  promotion_price=:promotion_price , manufacture_date=:manufacture_date, expired_date=:expired_date";
-                // prepare query for execution
-                $stmt = $con->prepare($query);
                 $name = $_POST['name'];
                 $description = $_POST['description'];
                 $price = $_POST['price'];
@@ -58,30 +54,55 @@
                 $manufacture_date = $_POST['manufacture_date'];
                 $expired_date = $_POST['expired_date'];
 
-                // $error = array();
+                $errors = array();
+
+                // $errors = array();
 
                 // if (empty($name)) {
-                //     echo "<div class='alert alert-danger'>Please enter the name!</div>";
-                // } elseif (!preg_match("/^[a-zA-Z]+$/", $name)) {
-                //     echo "<div class='alert alert-danger'>Name can only contain alphabetic characters!</div>";
-                // }
-                // if ($promotion_price >= $price) {
-                //     echo "<div class='alert alert-danger'>Promotion price must be cheaper than original price<div>";
-                // }
-                // if ($manufacture_date >= $expired_date) {
-                //     echo "<div class='alert alert-danger'>Manufacture date must be smaller than expired date</div>";
-                // } elseif ($expired_date <= $manufacture_date) {
-                //     echo "<div class='alert alert-danger'>Expired date must be earlier than manufacture date</div>";
-                // } else {
+                //   $errors[] = "Name is required.";
+                // } if (empty($description)) {
+                //     $errors[] = "Description is required.";
+
+                if (empty($name)) {
+                    $errors[] = "Name is required.";
+                }
+                if (empty($description)) {
+                    $errors[] = "Description is required.";
+                }
+                if (empty($price)) {
+                    $errors[] = "Price is required.";
+                } elseif (!is_numeric($price)) {
+                    $errors[] = "Price must be a numeric value.";
+                }
+                if (empty($promotion_price)) {
+                    $errors[] = "Promotion Price is required.";
+                } elseif (!is_numeric($promotion_price)) {
+                    $errors[] = "Promotion Price must be a numeric value.";
+                }
+                if (empty($manufacture_date)) {
+                    $errors[] = "Manufacture Date is required.";
+                }
+                if (empty($expired_date)) {
+                    $errors[] = "Expired Date is required.";
+                }
 
                 if ($promotion_price >= $price) {
-                    echo "<div class='alert alert-danger'>Promotion price must be cheaper than original price
-                        </div>";
-                } elseif ($expired_date <= $manufacture_date) {
-                    echo "<div class='alert alert-danger'>Expired date must be later than manufacture date</div>";
-                } else {
+                    $errors[] = "Promotion price must be cheaper than the original price.";
+                }
+                if ($expired_date <= $manufacture_date) {
+                    $errors[] = "Expired date must be later than the manufacture date.";
+                }
 
-                    // bind the parameters
+                if (!empty($errors)) {
+                    echo "<div class='alert alert-danger'>";
+                    foreach ($errors as $error) {
+                        echo "<p class='error-message'>$error</p>";
+                    }
+                    echo "</div>";
+                } else {
+                    $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created,  promotion_price=:promotion_price , manufacture_date=:manufacture_date, expired_date=:expired_date";
+                    $stmt = $con->prepare($query);
+                    $created = date('Y-m-d H:i:s');
                     $stmt->bindParam(':name', $name);
                     $stmt->bindParam(':description', $description);
                     $stmt->bindParam(':price', $price);
@@ -89,30 +110,25 @@
                     $stmt->bindParam(':promotion_price', $promotion_price);
                     $stmt->bindParam(':manufacture_date', $manufacture_date);
                     $stmt->bindParam(':expired_date', $expired_date);
-                    $created = date('Y-m-d H:i:s'); // get the current date and time
 
-                    // Execute the query
                     if ($stmt->execute()) {
                         echo "<div class='alert alert-success'>Record was saved.</div>";
                     } else {
                         echo "<div class='alert alert-danger'>Unable to save record.</div>";
                     }
                 }
-            } // show error
-            catch (PDOException $exception) {
-                die('ERROR: ' . $exception->getMessage());
+            } catch (PDOException $exception) {
+                echo "<div class='alert alert-danger'>Error: " . $exception->getMessage() . "</div>";
             }
         }
-
         ?>
-
 
         <!-- HTML form here where the product information will be entered -->
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
             <div class="row mb-3">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-10">
-                    <input type="text" name="name" class="form-control" pattern='^[A-Za-z\s]+$' title='Please enter a valid name (letters and spaces only).' id="name">
+                    <input type="text" name="name" class="form-control" title='Please enter a valid name (letters and spaces only).' id="name">
                 </div>
             </div>
             <div class="row mb-3">
@@ -124,13 +140,13 @@
             <div class="row mb-3">
                 <label for="price" class="col-sm-2 col-form-label">Price</label>
                 <div class="col-sm-10">
-                    <input type="text" name="price" class="form-control" pattern='^\d+(\.\d{1,2})?$' title='Please enter a valid number.' id="price">
+                    <input type="text" name="price" class="form-control" title='Please enter a valid number.' id="price">
                 </div>
             </div>
             <div class="row mb-3">
                 <label for="promotion_price" class="col-sm-2 col-form-label">Promotion Price</label>
                 <div class="col-sm-10">
-                    <input type="text" name="promotion_price" class="form-control" pattern='^\d+(\.\d{1,2})?$' title='Please enter a valid number.' id="promotion_price">
+                    <input type="text" name="promotion_price" class="form-control" title='Please enter a valid number.' id="promotion_price">
                 </div>
             </div>
             <div class="row mb-3">
@@ -154,9 +170,11 @@
         </form>
 
     </div>
+    <!-- end .container -->
 
-    <!-- Latest compiled and minified Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
