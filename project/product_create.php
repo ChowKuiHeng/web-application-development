@@ -125,48 +125,44 @@
 
         <!-- HTML form here where the product information will be entered -->
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
-            <div class="row mb-3">
-                <label for="name" class="col-sm-2 col-form-label">Name</label>
-                <div class="col-sm-10">
-                    <input type="text" name="name" class="form-control" title='Please enter a valid name (letters and spaces only).' id="name">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="description" class="col-sm-2 col-form-label">Description</label>
-                <div class="col-sm-10">
-                    <textarea class="form-control" name="description" id="description"></textarea>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="price" class="col-sm-2 col-form-label">Price</label>
-                <div class="col-sm-10">
-                    <input type="text" name="price" class="form-control" title='Please enter a valid number.' id="price">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="promotion_price" class="col-sm-2 col-form-label">Promotion Price</label>
-                <div class="col-sm-10">
-                    <input type="text" name="promotion_price" class="form-control" title='Please enter a valid number.' id="promotion_price">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="manufacture_date" class="col-sm-2 col-form-label">Manufacture Date</label>
-                <div class="col-sm-10">
-                    <input type="text" name="manufacture_date" class="form-control" id="manufacture_date">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="expired_date" class="col-sm-2 col-form-label">Expired Date</label>
-                <div class="col-sm-10">
-                    <input type="text" name="expired_date" class="form-control" id="expired_date">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-sm-10 offset-sm-2">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a href="index.php" class="btn btn-danger">Back to read products</a>
-                </div>
-            </div>
+            <table class='table table-hover table-responsive table-bordered'>
+                <tr>
+                    <td>Name</td>
+                    <td><input type="text" name="name" class="form-control" id="name"></td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td><textarea class="form-control" name="description" id="description"></textarea></td>
+
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td><input type="text" name="price" class="form-control" id="price"></td>
+                </tr>
+
+                <tr>
+                    <td>Promotion Price</td>
+                    <td><input type="text" name="promotion_price" class="form-control" id="promotion_price"></td>
+                </tr>
+
+                <tr>
+                    <td>Manufacture Date</td>
+                    <td><input type="text" name="manufacture_date" class="form-control" id="manufacture_date"></td>
+                </tr>
+
+                <tr>
+                    <td>Expired Date</td>
+                    <td><input type="text" name="expired_date" class="form-control" id="expired_date"></td>
+                </tr>
+                <td></td>
+                <td>
+                    <input type='submit' value='Save' class='btn btn-primary' />
+                    <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                </td>
+                </tr>
+
+
+            </table>
         </form>
 
     </div>

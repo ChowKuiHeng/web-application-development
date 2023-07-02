@@ -16,6 +16,7 @@
 
         <!-- PHP insert code will be here -->
         <?php
+        date_default_timezone_set('asia/Kuala_Lumpur');
         // include database connection
         include 'config/database.php';
 
@@ -27,7 +28,6 @@
                 $lastname = $_POST['lastname'];
                 $gender = $_POST['gender'];
                 $date_of_birth = $_POST['date_of_birth'];
-                $registration_datetime = $_POST['registration_datetime'];
                 $account_status = $_POST['account_status'];
 
                 $errors = array();
@@ -41,9 +41,13 @@
 
                 if (empty($username)) {
                     $errors[] = "Username is required.";
+                } elseif (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_-]{5,}$/', $username)) {
+                    $errors[] = 'Invalid username format.';
                 }
                 if (empty($password)) {
                     $errors[] = "Password is required.";
+                } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*[-+$()%@#]).{6,}$/', $password)) {
+                    $errors[] = 'Invalid password format.';
                 }
                 if (empty($firstname)) {
                     $errors[] = "Firstname is required.";
@@ -57,12 +61,6 @@
                 if (empty($date_of_birth)) {
                     $errors[] = "Date of birth is required.";
                 }
-                if (empty($registration_datetime)) {
-                    $errors[] = "Registration date time is required.";
-                }
-                if (empty($account_status)) {
-                    $errors[] = "Account Status is required.";
-                }
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
                     foreach ($errors as $error) {
@@ -70,7 +68,7 @@
                     }
                     echo "</div>";
                 } else {
-                    $query = "INSERT INTO cutomers SET username=:username, password=:password, firstname=:firstname, lastname=:lastname,  gender=:gender , date_of_birth=:date_of_birth,  registration_datetime=:registration_datetime, account_status=:account_status";
+                    $query = "INSERT INTO customers SET username=:username, password=:password, firstname=:firstname, lastname=:lastname,  gender=:gender , date_of_birth=:date_of_birth,  registration_datetime=:registration_datetime, account_status=:account_status";
                     $stmt = $con->prepare($query);
                     $registration_datetime = date('Y-m-d H:i:s');
                     $stmt->bindParam(':username', $username);
@@ -96,48 +94,65 @@
 
         <!-- HTML form here where the product information will be entered -->
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
-            <div class="row mb-3">
-                <label for="username" class="col-sm-2 col-form-label">Username</label>
-                <div class="col-sm-10">
-                    <input type="text" name="username" class="form-control" id="username">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="password" class="col-sm-2 col-form-label">Password</label>
-                <div class="col-sm-10">
-                    <input class="form-control" name="password" id="password"></input>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="firstname" class="col-sm-2 col-form-label">Firstname</label>
-                <div class="col-sm-10">
-                    <input type="text" name="firstname" class="form-control" id="firstname">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="lastname" class="col-sm-2 col-form-label">Lastname</label>
-                <div class="col-sm-10">
-                    <input type="text" name="lastname" class="form-control" id="lastname">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="gender" class="col-sm-2 col-form-label">Gender</label>
-                <div class="col-sm-10">
-                    <input type="text" name="gender" class="form-control" id="gender">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="date_of_birth" class="col-sm-2 col-form-label">Date of birth</label>
-                <div class="col-sm-10">
-                    <input type="text" name="date_of_birth" class="form-control" id="date_of_birth">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-sm-10 offset-sm-2">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a href="index.php" class="btn btn-danger">Back to read products</a>
-                </div>
-            </div>
+            <table class='table table-hover table-responsive table-bordered'>
+                <tr>
+                    <td>Username</td>
+                    <td><input type="text" name="username" class="form-control" id="username"></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="password" name="password" class="form-control" id="password"></td>
+
+                </tr>
+                <tr>
+                    <td>Firstname</td>
+                    <td><input type="text" name="firstname" class="form-control" id="firstname"></td>
+                </tr>
+
+                <tr>
+                    <td>Lastname</td>
+                    <td><input type="text" name="lastname" class="form-control" id="lastname"></td>
+                </tr>
+
+                <tr>
+                    <td>Gender</td>
+                    <td><input class="form-check-input" type="radio" name="gender" id="genderMale" value="Male" required>
+                        <label class="form-check-label" for="genderMale">
+                            Male
+                        </label>
+                        <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="Female" required>
+                        <label class="form-check-label" for="genderFemale">
+                            Female
+                        </label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Date of birth</td>
+                    <td><input type="date" name="date_of_birth" class="form-control" id="date_of_birth"></td>
+                </tr>
+                <tr>
+                    <td>Account status</td>
+                    <td><input class="form-check-input" type="radio" name="account_status" id="active" value="Active" required>
+                        <label class="form-check-label" for="active">
+                            Active
+                        </label>
+                        <input class="form-check-input" type="radio" name="account_status" id="inactive" value="Inactive" required>
+                        <label class="form-check-label" for="inactive">
+                            Inactive
+                        </label>
+                    </td>
+                </tr>
+
+                <td></td>
+                <td>
+                    <input type='submit' value='Save' class='btn btn-primary' />
+                    <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                </td>
+                </tr>
+
+
+            </table>
         </form>
 
     </div>
