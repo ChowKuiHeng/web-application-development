@@ -77,11 +77,11 @@
             </div>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" pattern="[a-zA-Z_\-][a-zA-Z0-9_\-]{5,}" title="Username must start with a letter, have at least 6 characters, and can only contain letters, numbers, '_', or '-'." required>
+                <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*[\W_]).{6,}$" title="Password must have at least 6 characters, including 1 uppercase letter, 1 lowercase letter, and 1 number. No symbols are allowed." required>
+                <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>

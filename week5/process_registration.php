@@ -29,17 +29,25 @@
 
         $errors = array();
 
-        if (empty($password)) {
-            $errors['password'] = "Password is required.";
-        } elseif (strlen($password) < 6) {
-            $errors['password'] = "Password must be at least 6 characters long.";
-        } else {
+        if (empty($username)) {
+            $errors[] = "Username is required.";
+        } elseif (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_-]{5,}$/', $username)) {
+            $errors[] = 'Invalid username format.';
         }
+        if (empty($password)) {
+            $errors[] = "Password is required.";
+        } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*[-+$()%@#]).{6,}$/', $password))
+            $errors[] = 'Invalid password format.';
 
         if (empty($confirmPassword)) {
             $errors['confirmPassword'] = "Confirm password is required.";
         } elseif ($password !== $confirmPassword) {
             $errors['confirmPassword'] = "Passwords do not match.";
+        }
+        if (empty($email)) {
+            $errors[] = 'Email is required.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Invalid email format.';
         }
 
         if (!empty($errors)) {
