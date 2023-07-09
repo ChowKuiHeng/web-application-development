@@ -57,20 +57,20 @@
                     $errors[] = "Promotion Price is required.";
                 } elseif (!is_numeric($promotion_price)) {
                     $errors[] = "Promotion Price must be a numeric value.";
+                } else if ($promotion_price >= $price) {
+                    $errors[] = "Promotion price must be cheaper than the original price.";
                 }
                 if (empty($manufacture_date)) {
                     $errors[] = "Manufacture Date is required.";
+                } else if ($expired_date <= $manufacture_date) {
+                    $errors[] = "Expired date must be later than the manufacture date.";
                 }
+
                 if (empty($expired_date)) {
                     $errors[] = "Expired Date is required.";
                 }
 
-                if ($promotion_price >= $price) {
-                    $errors[] = "Promotion price must be cheaper than the original price.";
-                }
-                if ($expired_date <= $manufacture_date) {
-                    $errors[] = "Expired date must be later than the manufacture date.";
-                }
+
 
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
