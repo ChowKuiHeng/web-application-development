@@ -27,8 +27,22 @@
         // delete message prompt will be here
 
         // select all data
-        $query = "SELECT id, username, firstname, lastname, gender, date_of_birth, account_status FROM customers ORDER BY id DESC";
+
+        // $query = "SELECT id, username, firstname, lastname, gender, date_of_birth, account_status FROM customers ORDER BY id DESC";
+        // $stmt = $con->prepare($query);
+        // $stmt->execute();
+        $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
+        $query = "SELECT id, username, firstname, lastname,  email, gender, date_of_birth, account_status FROM customers";
+        if (!empty($searchKeyword)) {
+            $query .= " WHERE username LIKE :keyword OR firstname LIKE :keyword OR lastname LIKE :keyword OR email LIKE :keyword OR gender LIKE :keyword OR date_of_birth LIKE :keyword OR account_status LIKE :keyword";
+            $searchKeyword = "%{$searchKeyword}%";
+        }
+        $query .= " ORDER BY id DESC";
         $stmt = $con->prepare($query);
+        if (!empty($searchKeyword)) {
+            $stmt->bindParam(':keyword', $searchKeyword);
+        }
+
         $stmt->execute();
 
         // this is how to get number of rows returned
@@ -36,6 +50,15 @@
 
         // link to create record form
         echo "<a href='customers.php' class='btn btn-primary mb-3'>Create New Customer</a>";
+
+        echo '<div class="p-3">
+        <form method="GET" action="">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="search" placeholder="Search product..." value="' . str_replace('%', '', $searchKeyword) . '">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>';
 
         //check if more than 0 record found
         if ($num > 0) {

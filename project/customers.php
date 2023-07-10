@@ -32,6 +32,7 @@
                 $confirm_password = $_POST['confirm_password'];
                 $firstname = $_POST['firstname'];
                 $lastname = $_POST['lastname'];
+                $email = $_POST['email'];
                 $gender = $_POST['gender'];
                 $date_of_birth = $_POST['date_of_birth'];
                 $account_status = $_POST['account_status'];
@@ -65,6 +66,11 @@
                 if (empty($lastname)) {
                     $errors[] = "Lastname is required.";
                 }
+                if (empty($email)) {
+                    $errors[] = "Email is required.";
+                }elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errors[] = 'Invalid email format.';
+                }
                 if (empty($gender)) {
                     $errors[] = "Gender is required.";
                 }
@@ -78,14 +84,14 @@
                     }
                     echo "</div>";
                 } else {
-                    $query = "INSERT INTO customers SET username=:username, password=:password, confirm_password=:confirm_password, firstname=:firstname, lastname=:lastname,  gender=:gender , date_of_birth=:date_of_birth,  registration_datetime=:registration_datetime, account_status=:account_status";
+                    $query = "INSERT INTO customers SET username=:username, password=:password,  firstname=:firstname, lastname=:lastname, email=:email, gender=:gender , date_of_birth=:date_of_birth,  registration_datetime=:registration_datetime, account_status=:account_status";
                     $stmt = $con->prepare($query);
                     $registration_datetime = date('Y-m-d H:i:s');
                     $stmt->bindParam(':username', $username);
                     $stmt->bindParam(':password', $password);
-                    $stmt->bindParam(':confirm_password', $confirm_password);
                     $stmt->bindParam(':firstname', $firstname);
                     $stmt->bindParam(':lastname', $lastname);
+                    $stmt->bindParam(':email', $email);
                     $stmt->bindParam(':gender', $gender);
                     $stmt->bindParam(':date_of_birth', $date_of_birth);
                     $stmt->bindParam(':registration_datetime', $registration_datetime);
@@ -136,6 +142,10 @@
                 <tr>
                     <td>Lastname</td>
                     <td><input type="text" name="lastname" class="form-control" id="lastname"></td>
+                </tr>
+                <tr>
+                    <td>Email</td> 
+                    <td><input type="text" name="email" class="form-control" id="email"></td>
                 </tr>
 
                 <tr>

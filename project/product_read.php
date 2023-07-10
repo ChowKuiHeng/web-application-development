@@ -26,9 +26,23 @@
 
         // delete message prompt will be here
 
-        // select all data
-        $query = "SELECT id, name, description, price, promotion_price FROM products ORDER BY id DESC";
+        // // select all data
+        // $query = "SELECT id, name, description, price, promotion_price FROM products ORDER BY id DESC";
+        // $stmt = $con->prepare($query);
+        // $stmt->execute();
+
+        $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
+        $query = "SELECT id, name, description, price, promotion_price FROM products";
+        if (!empty($searchKeyword)) {
+            $query .= " WHERE name LIKE :keyword";
+            $searchKeyword = "%{$searchKeyword}%";
+        }
+        $query .= " ORDER BY id DESC";
         $stmt = $con->prepare($query);
+        if (!empty($searchKeyword)) {
+            $stmt->bindParam(':keyword', $searchKeyword);
+        }
+
         $stmt->execute();
 
         // this is how to get number of rows returned
@@ -36,6 +50,15 @@
 
         // link to create record form
         echo "<a href='product_create.php' class='btn btn-primary mb-3'>Create New Product</a>";
+
+        echo '<div class="p-3">
+        <form method="GET" action="">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="search" placeholder="Search product..." value="' . str_replace('%', '', $searchKeyword) . '">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>';
 
         //check if more than 0 record found
         if ($num > 0) {
