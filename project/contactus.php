@@ -8,6 +8,10 @@
 </head>
 
 <body>
+    <!-- Navigation Menu -->
+    <?php
+    include 'navigation.php';
+    ?>
     <!-- Container -->
     <div class="container mt-5">
         <div class="page-header">

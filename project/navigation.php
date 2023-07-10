@@ -10,13 +10,13 @@
                     <a class="nav-link" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="create_product.php">Create Product</a>
+                    <a class="nav-link" href="product_create.php">Create Product</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="create_customer.php">Create Customer</a>
+                    <a class="nav-link" href="customers.php">Create Customer</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Contact Us</a>
+                    <a class="nav-link" href="contactus.php">Contact Us</a>
                 </li>
             </ul>
         </div>

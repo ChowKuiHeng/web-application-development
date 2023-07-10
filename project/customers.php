@@ -8,6 +8,11 @@
 </head>
 
 <body>
+    <!-- Navigation Menu -->
+    <?php
+    include 'navigation.php';
+    ?>
+
     <!-- Container -->
     <div class="container mt-5">
         <div class="page-header">
@@ -24,6 +29,7 @@
             try {
                 $username = $_POST['username'];
                 $password = $_POST['password'];
+                $confirm_password = $_POST['confirm_password'];
                 $firstname = $_POST['firstname'];
                 $lastname = $_POST['lastname'];
                 $gender = $_POST['gender'];
@@ -46,9 +52,13 @@
                 }
                 if (empty($password)) {
                     $errors[] = "Password is required.";
+                    if ($password !== $confirm_password) {
+                        $errors[] = "Passwords do not match.";
+                    }
                 } elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?!.*[-+$()%@#]).{6,}$/', $password)) {
                     $errors[] = 'Invalid password format.';
                 }
+
                 if (empty($firstname)) {
                     $errors[] = "Firstname is required.";
                 }
@@ -68,11 +78,12 @@
                     }
                     echo "</div>";
                 } else {
-                    $query = "INSERT INTO customers SET username=:username, password=:password, firstname=:firstname, lastname=:lastname,  gender=:gender , date_of_birth=:date_of_birth,  registration_datetime=:registration_datetime, account_status=:account_status";
+                    $query = "INSERT INTO customers SET username=:username, password=:password, confirm_password=:confirm_password, firstname=:firstname, lastname=:lastname,  gender=:gender , date_of_birth=:date_of_birth,  registration_datetime=:registration_datetime, account_status=:account_status";
                     $stmt = $con->prepare($query);
                     $registration_datetime = date('Y-m-d H:i:s');
                     $stmt->bindParam(':username', $username);
                     $stmt->bindParam(':password', $password);
+                    $stmt->bindParam(':confirm_password', $confirm_password);
                     $stmt->bindParam(':firstname', $firstname);
                     $stmt->bindParam(':lastname', $lastname);
                     $stmt->bindParam(':gender', $gender);
@@ -86,8 +97,16 @@
                         echo "<div class='alert alert-danger'>Unable to save record.</div>";
                     }
                 }
+                // } catch (PDOException $exception) {
+                //     echo "<div class='alert alert-danger'>Error: " . $exception->getMessage() . "</div>";
+                // }
             } catch (PDOException $exception) {
-                echo "<div class='alert alert-danger'>Error: " . $exception->getMessage() . "</div>";
+                //  die('ERROR: ' . $exception->getMessage());
+                if ($exception->getCode() == 23000) {
+                    echo '<div class= "alert alert-danger role=alert">' . 'Username has been taken' . '</div>';
+                } else {
+                    echo '<div class= "alert alert-danger role=alert">' . $exception->getMessage() . '</div>';
+                }
             }
         }
         ?>
@@ -102,6 +121,11 @@
                 <tr>
                     <td>Password</td>
                     <td><input type="password" name="password" class="form-control" id="password"></td>
+
+                </tr>
+                <tr>
+                    <td>Confirm Password</td>
+                    <td><input type="password" name="confirm_password" class="form-control" id="confirm_password"></td>
 
                 </tr>
                 <tr>
@@ -147,7 +171,7 @@
                 <td></td>
                 <td>
                     <input type='submit' value='Save' class='btn btn-primary' />
-                    <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                    <a href='customer_read.php' class='btn btn-danger'>Back to read customer</a>
                 </td>
                 </tr>
 
