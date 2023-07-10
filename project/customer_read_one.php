@@ -32,7 +32,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, username, firstname, lastname, gender, date_of_birth, account_status FROM customers WHERE id = :id ";
+            $query = "SELECT id, username, firstname, lastname, email,gender, date_of_birth, account_status FROM customers WHERE id = :id ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -48,6 +48,7 @@
             $username = $row['username'];
             $firstname = $row['firstname'];
             $lastname = $row['lastname'];
+            $email = $row['email'];
             $gender = $row['gender'];
             $date_of_birth = $row['date_of_birth'];
             $account_status = $row['account_status'];
@@ -75,6 +76,10 @@
             <tr>
                 <td>Lastname</td>
                 <td><?php echo htmlspecialchars($lastname, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><?php echo htmlspecialchars($email, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
                 <td>Gender</td>

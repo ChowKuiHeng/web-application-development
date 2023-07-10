@@ -34,7 +34,7 @@
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
         $query = "SELECT id, username, firstname, lastname,  email, gender, date_of_birth, account_status FROM customers";
         if (!empty($searchKeyword)) {
-            $query .= " WHERE username LIKE :keyword OR firstname LIKE :keyword OR lastname LIKE :keyword OR email LIKE :keyword OR gender LIKE :keyword OR date_of_birth LIKE :keyword OR account_status LIKE :keyword";
+            $query .= " WHERE id LIKE :keyword OR username LIKE :keyword OR firstname LIKE :keyword OR lastname LIKE :keyword OR email LIKE :keyword OR gender LIKE :keyword OR date_of_birth LIKE :keyword OR account_status LIKE :keyword";
             $searchKeyword = "%{$searchKeyword}%";
         }
         $query .= " ORDER BY id DESC";
@@ -72,6 +72,7 @@
             echo "<th>Username</th>";
             echo "<th>Firstname</th>";
             echo "<th>Lastname</th>";
+            echo "<th>Email</th>";
             echo "<th>Gender</th>";
             echo "<th>Date of Birth</th>";
             echo "<th>Account Status</th>";
@@ -89,6 +90,7 @@
                 echo "<td>{$username}</td>";
                 echo "<td>{$firstname}</td>";
                 echo "<td>{$lastname}</td>";
+                echo "<td>{$email}</td>";
                 echo "<td>{$gender}</td>";
                 echo "<td>{$date_of_birth}</td>";
                 echo "<td>{$account_status}</td>";
