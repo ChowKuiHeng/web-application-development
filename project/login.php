@@ -42,7 +42,6 @@
                     $query = "SELECT id, username, password, email,account_status FROM customers WHERE username=:username_enter OR email=:username_enter";
                     $stmt = $con->prepare($query);
                     $stmt->bindParam(':username_enter', $username_enter);
-                    $stmt->bindParam(':username_enter', $username_enter);
                     $stmt->execute();
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
                     if ($row) {
