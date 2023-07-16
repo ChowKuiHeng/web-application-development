@@ -10,9 +10,6 @@
 <body>
     <!-- Container -->
     <div class="container mt-5">
-        <div class="page-header">
-            <h1>Login Page</h1>
-        </div>
 
         <!-- PHP insert code will be here -->
         <?php
@@ -54,7 +51,7 @@
                                 $error = "Inactive account.";
                                 echo "<div class='alert alert-danger'>";
 
-                                    echo "<p class='error-message'>$error</p>";
+                                echo "<p class='error-message'>$error</p>";
 
                                 echo "</div>";
                             }
@@ -62,15 +59,15 @@
                             $error = "Incorrect password.";
                             echo "<div class='alert alert-danger'>";
 
-                                echo "<p class='error-message'>$error</p>";
-                            
+                            echo "<p class='error-message'>$error</p>";
+
                             echo "</div>";
                         }
                     } else {
                         $error = "Username/Email Not Found.";
                         echo "<div class='alert alert-danger'>";
 
-                            echo "<p class='error-message'>$error</p>";
+                        echo "<p class='error-message'>$error</p>";
 
                         echo "</div>";
                     }
@@ -84,7 +81,32 @@
 
         <!-- HTML form here where the product information will be entered -->
         <form action="" method="POST">
-            <table class='table table-hover table-responsive table-bordered'>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Login Form
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group mb-3 ">
+                                        <label for="text">Username</label>
+                                        <input type="text" name="username_enter" class="form-control" id="username_enter">
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="password">Password</label>
+                                        <input type="password" name="password_enter" class="form-control" id="password_enter">
+                                    </div>
+                                    <input type='submit' value='Login' class='btn btn-primary' />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Username</td>
                     <td><input type="text" name="username_enter" class="form-control" id="username_enter"></td>
@@ -101,7 +123,7 @@
                 </tr>
 
 
-            </table>
+            </table> -->
         </form>
 
     </div>

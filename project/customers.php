@@ -69,7 +69,7 @@
                 }
                 if (empty($email)) {
                     $errors[] = "Email is required.";
-                }elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $errors[] = 'Invalid email format.';
                 }
                 if (empty($gender)) {
@@ -88,6 +88,8 @@
                     $query = "INSERT INTO customers SET username=:username, password=:password,  firstname=:firstname, lastname=:lastname, email=:email, gender=:gender , date_of_birth=:date_of_birth,  registration_datetime=:registration_datetime, account_status=:account_status";
                     $stmt = $con->prepare($query);
                     $registration_datetime = date('Y-m-d H:i:s');
+                    $reset = "ALTER TABLE customers AUTO_INCREMENT = 1";
+                    $resetquery = $con->prepare($reset);
                     $stmt->bindParam(':username', $username);
                     $stmt->bindParam(':password', $hashed_password);
                     $stmt->bindParam(':firstname', $firstname);
@@ -111,6 +113,7 @@
                 //  die('ERROR: ' . $exception->getMessage());
                 if ($exception->getCode() == 23000) {
                     echo '<div class= "alert alert-danger role=alert">' . 'Username has been taken' . '</div>';
+                    $resetquery->execute();
                 } else {
                     echo '<div class= "alert alert-danger role=alert">' . $exception->getMessage() . '</div>';
                 }
@@ -145,7 +148,7 @@
                     <td><input type="text" name="lastname" class="form-control" id="lastname"></td>
                 </tr>
                 <tr>
-                    <td>Email</td> 
+                    <td>Email</td>
                     <td><input type="text" name="email" class="form-control" id="email"></td>
                 </tr>
 
