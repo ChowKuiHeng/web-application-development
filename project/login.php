@@ -53,12 +53,27 @@
                                 exit();
                             } else {
                                 $error = "Inactive account.";
+                                echo "<div class='alert alert-danger'>";
+
+                                    echo "<p class='error-message'>$error</p>";
+
+                                echo "</div>";
                             }
                         } else {
                             $error = "Incorrect password.";
+                            echo "<div class='alert alert-danger'>";
+
+                                echo "<p class='error-message'>$error</p>";
+                            
+                            echo "</div>";
                         }
                     } else {
                         $error = "Username/Email Not Found.";
+                        echo "<div class='alert alert-danger'>";
+
+                            echo "<p class='error-message'>$error</p>";
+
+                        echo "</div>";
                     }
                 } catch (PDOException $exception) {
                     $error = $exception->getMessage();
