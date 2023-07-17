@@ -32,6 +32,7 @@
                 $promotion_price = $_POST['promotion_price'];
                 $manufacture_date = $_POST['manufacture_date'];
                 $expired_date = $_POST['expired_date'];
+                $categories_name = $_POST['categories_name'];
 
                 $errors = array();
 
@@ -70,8 +71,6 @@
                     $errors[] = "Expired Date is required.";
                 }
 
-
-
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
                     foreach ($errors as $error) {
@@ -79,7 +78,7 @@
                     }
                     echo "</div>";
                 } else {
-                    $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created,  promotion_price=:promotion_price , manufacture_date=:manufacture_date, expired_date=:expired_date";
+                    $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created,  promotion_price=:promotion_price , manufacture_date=:manufacture_date, expired_date=:expired_date, categories_name=:categories_name";
                     $stmt = $con->prepare($query);
                     $created = date('Y-m-d H:i:s');
                     $stmt->bindParam(':name', $name);
@@ -89,6 +88,7 @@
                     $stmt->bindParam(':promotion_price', $promotion_price);
                     $stmt->bindParam(':manufacture_date', $manufacture_date);
                     $stmt->bindParam(':expired_date', $expired_date);
+                    $stmt->bindParam(':categories_name', $categories_name);
 
                     if ($stmt->execute()) {
                         echo "<div class='alert alert-success'>Record was saved.</div>";
@@ -132,6 +132,21 @@
                 <tr>
                     <td>Expired Date</td>
                     <td><input type="text" name="expired_date" class="form-control" id="expired_date"></td>
+                </tr>
+                <tr>
+                    <td>Categories Name</td>
+                    <td> <select class="form-select" name="categories_name"><?php
+                                    // Fetch categories from the database
+                                    $query = "SELECT categories_name FROM categories";
+                                    $stmt = $con->prepare($query);
+                                    $stmt->execute();
+                                    $categories = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+                                    // Generate select options
+                                    foreach ($categories as $category) {
+                                        echo "<option value='$category'>$category</option>";
+                                    } ?></select>
+                    </td>
                 </tr>
                 <td></td>
                 <td>

@@ -13,7 +13,7 @@
                     <a class="nav-link" href="product_create.php">Create Product</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="customers.php">Create Customer</a>
+                    <a class="nav-link" href="customer_create.php">Create Customer</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contactus.php">Contact Us</a>
