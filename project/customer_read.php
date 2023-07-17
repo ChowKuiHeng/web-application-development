@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <!-- Navigation Menu -->
+    <!-- Navigation Menu --> 
     <?php
     include 'navigation.php';
     ?>
