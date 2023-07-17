@@ -32,7 +32,7 @@
         // $stmt->execute();
 
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
-        $query = "SELECT id, name, description, price, promotion_price FROM products";
+        $query = "SELECT id, name, description, price,categories_name, promotion_price FROM products";
         if (!empty($searchKeyword)) {
             $query .= " WHERE name LIKE :keyword";
             $searchKeyword = "%{$searchKeyword}%";
@@ -72,6 +72,7 @@
             echo "<th>Name</th>";
             echo "<th>Description</th>";
             echo "<th>Price</th>";
+            echo "<th>Categories Name</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -86,25 +87,6 @@
                 echo "<td>{$name}</td>";
                 echo "<td>{$description}</td>";
 
-                // echo "<td>";
-
-                // // if (!empty($promotion_price)) {
-                // //     // Display promotion price if available
-                // //     echo "{$promotion_price} (Promotion Price)<br>";
-                // //     echo "<span class='text-decoration-line-through'>{$price}";
-                // // } else {
-                // //     // Display regular price
-                // //     echo "{$price}";
-                // // }
-
-                // if (!empty($promotion_price)) {
-                //     // Display promotion price if available
-                //     echo "<div class='text-decoration-line-through'>{$price}</div>";
-                //     echo "{$promotion_price} (Promotion Price)";
-                // } else {
-                //     // Display regular price
-                //     echo "{$price}";
-                // }
 
                 echo "<td class='text-end'>";
                 if (!empty($promotion_price)) {
@@ -118,7 +100,7 @@
                 }
 
                 echo "</td>";
-
+                echo "<td>{$categories_name}</td>";
                 echo "<td>";
                 // read one record
                 echo "<a href='product_read_one.php?id={$id}' class='btn btn-info me-3'>Read</a>";

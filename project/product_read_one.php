@@ -32,7 +32,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price, promotion_price , manufacture_date,expired_date FROM products WHERE id = :id ";
+            $query = "SELECT id, name, description, price,categories_name, promotion_price , manufacture_date,expired_date FROM products WHERE id = :id ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -48,6 +48,7 @@
             $name = $row['name'];
             $description = $row['description'];
             $price = $row['price'];
+            $categories_name = $row['categories_name'];
             $promotion_price = $row['promotion_price'];
             $manufacture_date = $row['manufacture_date'];
             $expired_date = $row['expired_date'];
@@ -75,6 +76,10 @@
             <tr>
                 <td>Price</td>
                 <td><?php echo htmlspecialchars($price, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Categories Name</td>
+                <td><?php echo htmlspecialchars($categories_name, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
                 <td>Promotion Price</td>

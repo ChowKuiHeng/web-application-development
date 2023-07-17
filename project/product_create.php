@@ -25,7 +25,7 @@
         include 'config/database.php';
 
         if ($_POST) {
-            try {
+            try { 
                 $name = $_POST['name'];
                 $description = $_POST['description'];
                 $price = $_POST['price'];
