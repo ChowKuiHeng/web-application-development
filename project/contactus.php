@@ -10,7 +10,7 @@
 <body>
     <!-- Navigation Menu -->
     <?php
-    include 'navigation.php';
+    include 'menu/navigation.php';
     ?>
     <!-- Container -->
     <div class="container mt-5">

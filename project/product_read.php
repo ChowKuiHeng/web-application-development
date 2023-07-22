@@ -10,9 +10,8 @@
 <body>
     <!-- Navigation Menu -->
     <?php
-    include 'navigation.php';
+    include 'menu/navigation.php';
     ?>
-
     <!-- container -->
     <div class="container">
         <div class="page-header">
