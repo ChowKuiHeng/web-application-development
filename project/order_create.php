@@ -30,32 +30,52 @@
 
         if ($_POST) {
             try {
-                $customer = $_POST['customer'];
-                $order_date = date('Y-m-d H:i:s'); // get the current date and time
 
-                // Insert into order_summary table
-                $summary_query = "INSERT INTO order_summary SET customer_id=:customer, order_date=:order_date";
-                $summary_stmt = $con->prepare($summary_query);
-                $summary_stmt->bindParam(':customer', $customer);
-                $summary_stmt->bindParam(':order_date', $order_date);
-                $summary_stmt->execute();
+                $errors = array();
 
-                // Get the generated order_id
-                $order_id = $con->lastInsertId();
-
-                $product_id = $_POST['product'];
-                $quantity = $_POST['quantity'];
-                $customer = $_POST['customer'];
-                 // Insert into order_detail table
-                $details_query = "INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity";
-                $details_stmt = $con->prepare($details_query);
-                for ($i = 0; $i < count($product_id); $i++) {
-                    $details_stmt->bindParam(':order_id', $order_id);
-                    $details_stmt->bindParam(':product_id', $product_id[$i]);
-                    $details_stmt->bindParam(':quantity', $quantity[$i]);
-                    $details_stmt->execute();
+                $quantity_array = $_POST['quantity'];
+                foreach ($quantity_array as $quantity) {
+                    if (empty($quantity)) {
+                        $errors[] = "Please fill in the quantity for all products.";
+                    }
+                    if ($quantity == 0) {
+                        $errors[] = "Quantity cannot be zero.";
+                    }
                 }
-                echo "<div class='alert alert-success'>Order successfully.</div>";
+                if (!empty($errors)) {
+                    echo "<div class='alert alert-danger'>";
+                    foreach ($errors as $error) {
+                        echo "<p class='error-message'>$error</p>";
+                    }
+                    echo "</div>";
+                } else {
+                    $customer = $_POST['customer'];
+                    $order_date = date('Y-m-d H:i:s'); // get the current date and time
+
+                    // Insert into order_summary table
+                    $summary_query = "INSERT INTO order_summary SET customer_id=:customer, order_date=:order_date";
+                    $summary_stmt = $con->prepare($summary_query);
+                    $summary_stmt->bindParam(':customer', $customer);
+                    $summary_stmt->bindParam(':order_date', $order_date);
+                    $summary_stmt->execute();
+
+                    // Get the generated order_id
+                    $order_id = $con->lastInsertId();
+
+                    $product_id = $_POST['product'];
+                    $quantity = $_POST['quantity'];
+
+                    // Insert into order_detail table
+                    $details_query = "INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity";
+                    $details_stmt = $con->prepare($details_query);
+                    for ($i = 0; $i < 3; $i++) {
+                        $details_stmt->bindParam(':order_id', $order_id);
+                        $details_stmt->bindParam(':product_id', $product_id[$i]);
+                        $details_stmt->bindParam(':quantity', $quantity[$i]);
+                        $details_stmt->execute();
+                    }
+                    echo "<div class='alert alert-success'>Order successfully.</div>";
+                }
             } catch (PDOException $exception) {
                 echo "<div class='alert alert-danger'>Unable to place order.</div>";
             }
@@ -115,7 +135,7 @@
                         <?php
                         // Generate input fields for quantities corresponding to selected products
                         for ($i = 1; $i <= 3; $i++) {
-                            echo "<div><input type='number' name='quantity[]' min='1' value='1' /> Product $i</div>";
+                            echo "<div><input type='number' name='quantity[]' min='1'  /> Product $i</div>";
                         }
                         ?>
                     </td>
