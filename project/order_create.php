@@ -22,22 +22,39 @@
         <!-- PHP insert code will be here -->
         <?php
         // Include database connection
+        date_default_timezone_set('asia/Kuala_Lumpur');
         include 'config/database.php';
-  
+
         if ($_POST) {
             try {
 
                 $errors = array();
-
+                $product_id = $_POST['product'];
                 $quantity_array = $_POST['quantity'];
+                $customer = $_POST['customer'];
+                //add for loop for product id 
+
+                // $quantity_array = $_POST['customer']; // Incorrect variable assignment
+
+
+                if (empty($customer)) {
+                    $errors[] = "You need to select the customer.";
+                }
+                foreach ($product_id as $product) {
+                    if (empty($product)) {
+                        $errors[] = "Please select a product.";
+                    }
+                }
+
                 foreach ($quantity_array as $quantity) {
                     if (empty($quantity)) {
-                        $errors[] = "Please fill in the quantity for all products.";
+                        $errors[] = "Please fill in the quantity of products.";
                     }
                     if ($quantity == 0) {
                         $errors[] = "Quantity cannot be zero.";
                     }
                 }
+
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
                     foreach ($errors as $error) {
@@ -64,7 +81,7 @@
                     // Insert into order_detail table
                     $details_query = "INSERT INTO order_details SET order_id=:order_id, product_id=:product_id, quantity=:quantity";
                     $details_stmt = $con->prepare($details_query);
-                    for ($i = 0; $i < 3; $i++) {
+                    for ($i = 0; $i < count($product_id); $i++) {
                         $details_stmt->bindParam(':order_id', $order_id);
                         $details_stmt->bindParam(':product_id', $product_id[$i]);
                         $details_stmt->bindParam(':quantity', $quantity[$i]);
@@ -81,74 +98,115 @@
 
         <!-- HTML form here where the order information will be entered -->
         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="POST">
-            <table class='table table-hover table-responsive table-bordered'>
-                <tr>
-                    <td>Customer</td>
-                    <td>
-                        <select class="form-select" name="customer">
-                            <?php
-                            // Fetch customers from the database
-                            $query = "SELECT id, username FROM customers";
-                            $stmt = $con->prepare($query);
-                            $stmt->execute();
-                            $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                            // Generate select options
-                            foreach ($customers as $customer) {
-                                echo "<option value='{$customer['id']}'>{$customer['username']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </td>
-                </tr>
-                <?php
-                // Generate three dropdown menus for product selections
-                for ($i = 1; $i <= 3; $i++) {
-                    echo "<tr>
-                        <td>Product $i</td>
-                        <td>
-                            <select class='form-select' name='product[]'>
-                                <option value=''>Select a product</option>";
-                    // Fetch products from the database
-                    $query = "SELECT id, name FROM products";
-                    $stmt = $con->prepare($query);
-                    $stmt->execute();
-                    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Generate select options for each product
-                    foreach ($products as $product) {
-                        echo "<option value='{$product['id']}'>{$product['name']}</option>";
-                    }
-
-                    echo "</select>
-                        </td>
-                    </tr>";
-                }
-                ?>
-                <tr>
-                    <td>Quantities</td>
-                    <td>
+            <tr>
+                <td>Customer</td>
+                <td>
+                    <select class="form-select" name="customer">
+                        <option value=''>Select a customer</option>";
                         <?php
-                        // Generate input fields for quantities corresponding to selected products
-                        for ($i = 1; $i <= 3; $i++) {
-                            echo "<div><input type='number' name='quantity[]' min='1'  /> Product $i</div>";
+                        // Fetch customers from the database
+                        $query = "SELECT id, username FROM customers";
+                        $stmt = $con->prepare($query);
+                        $stmt->execute();
+                        $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Generate select options
+                        foreach ($customers as $customer) {
+                            echo "<option value='{$customer['id']}'>{$customer['username']}</option>";
                         }
                         ?>
+                    </select>
+                </td>
+            </tr>
+            <br>
+            <table class='table table-hover table-responsive table-bordered' id="row_del">
+
+                <tr>
+                    <td class="text-center ">#</td>
+                    <td class="text-center ">Product</td>
+                    <td class="text-center ">Quantity</td>
+                    <td class="text-center ">Action</td>
+                </tr>
+                <tr class="pRow">
+                    <td class="text-center">1</td>
+                    <td>
+                        <select class='form-select' name='product[]' aria-label=".form-select-lg example">
+                            <option value=''>Select a products</option>";
+                            <?php
+
+                            $query = "SELECT id, name FROM products";
+                            $stmt = $con->prepare($query);
+                            $stmt->execute();
+                            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                            // Generate select options for each product
+                            foreach ($products as $product) {
+                                echo "<option value='{$product['id']}'>{$product['name']}</option>";
+                            }
+                            ?>
+
+                        </select>
+                    </td>
+                    <td><input type="number" class='form-control' name='quantity[]' aria-label=".form-select-lg example" />
+
+
+                    </td>
+                    <td><input href='#' onclick='deleteRow(this)' class='btn d-flex justify-content-center btn-danger mt-1' value="Delete" /></td>
+                </tr>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td colspan="4">
+                        <input type="button" value="Add More Product" class="btn btn-success add_one" />
+                        <input type='submit' value='Create Order' class='btn btn-primary' />
                     </td>
                 </tr>
-                <td></td>
-                <td>
-                    <input type='submit' value='Create Order' class='btn btn-primary' />
-                </td>
                 </tr>
             </table>
         </form>
+        <script>
+            document.addEventListener('click', function(event) {
+                if (event.target.matches('.add_one')) {
+                    var rows = document.getElementsByClassName('pRow');
+                    // Get the last row in the table
+                    var lastRow = rows[rows.length - 1];
+                    // Clone the last row
+                    var clone = lastRow.cloneNode(true);
+                    // Insert the clone after the last row
+                    lastRow.insertAdjacentElement('afterend', clone);
+
+                    // Loop through the rows
+                    for (var i = 0; i < rows.length; i++) {
+                        // Set the inner HTML of the first cell to the current loop iteration number
+                        rows[i].cells[0].innerHTML = i + 1;
+                    }
+                }
+            }, false);
+
+            function deleteRow(r) {
+                var total = document.querySelectorAll('.pRow').length;
+                if (total > 1) {
+                    var i = r.parentNode.parentNode.rowIndex;
+                    document.getElementById("row_del").deleteRow(i);
+
+                    var rows = document.getElementsByClassName('pRow');
+                    for (var i = 0; i < rows.length; i++) {
+                        // Set the inner HTML of the first cell to the current loop iteration number
+                        rows[i].cells[0].innerHTML = i + 1;
+                    }
+                } else {
+                    alert("You need order at least one item.");
+                }
+            }
+        </script>
     </div>
     <!-- end .container -->
 
     <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    </script>
 </body>
 
 </html>
