@@ -23,11 +23,7 @@
         <?php
         // Include database connection
         include 'config/database.php';
-        $product_query = "SELECT id, name FROM products";
-        $product_stmt = $con->prepare($product_query);
-        $product_stmt->execute();
-        $product = $product_stmt->fetchAll(PDO::FETCH_ASSOC);
-
+  
         if ($_POST) {
             try {
 
