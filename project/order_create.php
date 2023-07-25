@@ -32,6 +32,7 @@
                 $product_id = $_POST['product'];
                 $quantity_array = $_POST['quantity'];
                 $customer = $_POST['customer'];
+                $selected_product_count = count($_POST['product']);
                 //add for loop for product id 
 
                 // $quantity_array = $_POST['customer']; // Incorrect variable assignment
@@ -111,8 +112,9 @@
                         $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         // Generate select options
-                        foreach ($customers as $customer) {
-                            echo "<option value='{$customer['id']}'>{$customer['username']}</option>";
+                        for ($x = 0; $x < count($customers); $x++) {
+                            $customer_selected = isset($_POST["customer"]) && $customers[$x]['id'] == $_POST["customer"] ? "selected" : "";
+                            echo "<option value='{$customers[$x]['id']}' $customer_selected>{$customers[$x]['username']}</option>";
                         }
                         ?>
                     </select>
@@ -127,32 +129,38 @@
                     <td class="text-center ">Quantity</td>
                     <td class="text-center ">Action</td>
                 </tr>
-                <tr class="pRow">
-                    <td class="text-center">1</td>
-                    <td>
-                        <select class='form-select' name='product[]' aria-label=".form-select-lg example">
-                            <option value=''>Select a products</option>";
-                            <?php
+                <?php
+                $product_keep = (!empty($error)) ? $selected_product_count : 1;
+                for ($x = 0; $x < $product_keep; $x++) {
+                ?>
+                    <tr class="pRow">
+                        <td class="text-center">1</td>
+                        <td>
+                            <select class='form-select' name='product[]' aria-label=".form-select-lg example">
+                                <option value=''>Select a products</option>";
+                                <?php
 
-                            $query = "SELECT id, name FROM products";
-                            $stmt = $con->prepare($query);
-                            $stmt->execute();
-                            $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                $query = "SELECT id, name FROM products";
+                                $stmt = $con->prepare($query);
+                                $stmt->execute();
+                                $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                for ($i = 0; $i < count($products); $i++) {
+                                    $product_selected = isset($_POST["product"]) && $products[$i]['id'] == $_POST["product"][$x] ? "selected" : "";
+                                    echo "<option value='{$products[$i]['id']}' $product_selected>{$products[$i]['name']}</option>";
+                                }
+                                ?>
 
-                            // Generate select options for each product
-                            foreach ($products as $product) {
-                                echo "<option value='{$product['id']}'>{$product['name']}</option>";
-                            }
-                            ?>
-
-                        </select>
-                    </td>
-                    <td><input type="number" class='form-control' name='quantity[]' aria-label=".form-select-lg example" />
+                            </select>
+                        </td>
+                        <td><input type="number" class='form-control' name='quantity[]' value="<?php echo isset($_POST['quantity']) ? $_POST['quantity'][$x] : 0; ?>" aria-label=".form-select-lg example" />
 
 
-                    </td>
-                    <td><input href='#' onclick='deleteRow(this)' class='btn d-flex justify-content-center btn-danger mt-1' value="Delete" /></td>
-                </tr>
+                        </td>
+                        <td><input href='#' onclick='deleteRow(this)' class='btn d-flex justify-content-center btn-danger mt-1' value="Delete" /></td>
+                    </tr>
+                <?php
+
+                } ?>
                 <tr>
                     <td>
 
