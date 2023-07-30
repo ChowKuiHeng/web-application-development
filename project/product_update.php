@@ -26,9 +26,6 @@
         // check if form was submitted
         if ($_POST) {
             try {
-                // write update query
-                // in this case, it seemed like we have so many fields to pass and
-                // it is better to label them and not use question marks
                 $query = "UPDATE products
                   SET name=:name, description=:description,price=:price WHERE id = :id";
                 // prepare query for excecution

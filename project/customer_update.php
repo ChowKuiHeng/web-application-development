@@ -60,9 +60,6 @@
         // check if form was submitted
         if ($_POST) {
             try {
-                // write update query
-                // in this case, it seemed like we have so many fields to pass and
-                // it is better to label them and not use question marks
                 $query = "UPDATE customers
                 SET username=:username, password=:password, firstname=:firstname, lastname=:lastname, gender=:gender, date_of_birth=:date_of_birth, account_status=:account_status, email=:email WHERE id = :id";
                 // prepare query for execution
