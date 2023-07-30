@@ -66,7 +66,9 @@
                 $stmt = $con->prepare($query);
                 // posted values
                 $username = htmlspecialchars(strip_tags($_POST['username']));
-                $password = htmlspecialchars(strip_tags($_POST['password']));
+                $old_password = htmlspecialchars(strip_tags($_POST['old_password']));
+                $new_password = htmlspecialchars(strip_tags($_POST['new_password']));
+                $confirm_password = htmlspecialchars(strip_tags($_POST['confirm_password']));
                 $firstname = htmlspecialchars(strip_tags($_POST['firstname']));
                 $lastname = htmlspecialchars(strip_tags($_POST['lastname']));
                 $email = htmlspecialchars(strip_tags($_POST['email']));
@@ -74,30 +76,59 @@
                 $date_of_birth = htmlspecialchars(strip_tags($_POST['date_of_birth']));
                 $account_status = htmlspecialchars(strip_tags($_POST['account_status']));
 
-                // bind the parameters
-                $stmt->bindParam(':id', $id);
-                $stmt->bindParam(':username', $username);
-                $stmt->bindParam(':password', $password);
-                $stmt->bindParam(':firstname', $firstname);
-                $stmt->bindParam(':lastname', $lastname);
-                $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':gender', $gender);
-                $stmt->bindParam(':date_of_birth', $date_of_birth);
-                $stmt->bindParam(':account_status', $account_status);
+                $errors = array();
 
-                // Execute the query
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was updated.</div>";
+                if (!empty($_POST['old_password'])) {
+                    if (password_verify($old_password, $row['password'])) {
+                        if ($new_password == $old_password) {
+                            $errors[] = "New Password cannot same with old password.";
+                        } else if ($new_password == $confirm_password) {
+                            $formatted_password = password_hash($new_password, PASSWORD_DEFAULT);
+                        } else {
+                            $errors[] = "Confirm password does not match with new password.";
+                        }
+                    } else {
+                        $errors[] = "You entered the wrong password for old password";
+                    }
                 } else {
-                    echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
+                    $formatted_password = $password;
+                }
+
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errors[] = "Invalid Email format.";
+                }
+
+                if (!empty($errors)) {
+                    echo "<div class='alert alert-danger'>";
+                    foreach ($errors as $errorMessage) {
+                        echo $errorMessage . "<br>";
+                    }
+                    echo "</div>";
+                } else {
+                    // bind the parameters
+                    $stmt->bindParam(':id', $id);
+                    $stmt->bindParam(':username', $username);
+                    $stmt->bindParam(':password', $formatted_password);
+                    $stmt->bindParam(':firstname', $firstname);
+                    $stmt->bindParam(':lastname', $lastname);
+                    $stmt->bindParam(':gender', $gender);
+                    $stmt->bindParam(':date_of_birth', $date_of_birth);
+                    $stmt->bindParam(':account_status', $account_status);
+                    $stmt->bindParam(':email', $email);
+                    // Execute the query
+                    if ($stmt->execute()) {
+                        echo "<div class='alert alert-success'>Record was updated.</div>";
+                    } else {
+                        echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
+                    }
                 }
             }
             // show errors
             catch (PDOException $exception) {
                 die('ERROR: ' . $exception->getMessage());
             }
-        }
-        ?>
+        } ?>
+
 
         <!-- HTML form to update record will be here -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
@@ -108,15 +139,15 @@
                 </tr>
                 <tr>
                     <td>Old Password</td>
-                    <td><input type="password" name='old_password' class='form-control'></textarea></td>
+                    <td><input type="password" name='old_password' class='form-control'></td>
                 </tr>
                 <tr>
                     <td>New Password</td>
-                    <td><input type="password" name='new_password' class='form-control'></textarea></td>
+                    <td><input type="password" name='new_password' class='form-control'></td>
                 </tr>
                 <tr>
                     <td>Confirm Password</td>
-                    <td><input type="password" name='confirm_password' class='form-control'></textarea></td>
+                    <td><input type="password" name='confirm_password' class='form-control'></td>
                 </tr>
                 <tr>
                     <td>First Name</td>
@@ -128,7 +159,15 @@
                 </tr>
                 <tr>
                     <td>Gender</td>
-                    <td><input type='text' name='gender' value="<?php echo htmlspecialchars($gender, ENT_QUOTES); ?>" class='form-control' /></td>
+                    <td><input class="form-check-input" type="radio" name="gender" id="genderMale" value="Male" required>
+                        <label class="form-check-label" for="genderMale">
+                            Male
+                        </label>
+                        <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="Female" required>
+                        <label class="form-check-label" for="genderFemale">
+                            Female
+                        </label>
+                    </td>
                 </tr>
                 <tr>
                     <td>Date of birth</td>
@@ -136,7 +175,15 @@
                 </tr>
                 <tr>
                     <td>Account Status</td>
-                    <td><input type='text' name='account_status' value="<?php echo htmlspecialchars($account_status, ENT_QUOTES); ?>" class='form-control' /></td>
+                    <td><input class="form-check-input" type="radio" name="account_status" id="active" value="Active" required>
+                        <label class="form-check-label" for="active">
+                            Active
+                        </label>
+                        <input class="form-check-input" type="radio" name="account_status" id="inactive" value="Inactive" required>
+                        <label class="form-check-label" for="inactive">
+                            Inactive
+                        </label>
+                    </td>
                 </tr>
                 <tr>
                     <td>Email</td>
