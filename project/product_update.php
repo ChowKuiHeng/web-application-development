@@ -110,8 +110,8 @@
 
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
-                    foreach ($errors as $displayError) {
-                        echo $displayError . "<br>";
+                    foreach ($errors as $error) {
+                        echo $error . "<br>";
                     }
                     echo "</div>";
                 } else {
