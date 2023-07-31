@@ -33,6 +33,19 @@
                 $quantity_array = $_POST['quantity'];
                 $customer = $_POST['customer'];
                 $selected_product_count = count($_POST['product']);
+                $noduplicate = array_unique($product_id);
+
+                if (sizeof($noduplicate) != sizeof($product_id)) {
+                    foreach ($product_id as $key => $val) {
+                        if (!array_key_exists($key, $noduplicate)) {
+                            $errors[] = "Duplicated products have been chosen ";
+                            array_splice($product_id, $key, 1);
+                            array_splice($quantity_array, $key, 1);
+                        }
+                    }
+                }
+
+                $selected_product_count = isset($noduplicate) ? count($noduplicate) : count($_POST['product']);
                 //add for loop for product id 
 
                 // $quantity_array = $_POST['customer']; // Incorrect variable assignment
