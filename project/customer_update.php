@@ -100,8 +100,8 @@
 
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
-                    foreach ($errors as $errorMessage) {
-                        echo $errorMessage . "<br>";
+                    foreach ($errors as $error) {
+                        echo $error . "<br>";
                     }
                     echo "</div>";
                 } else {
