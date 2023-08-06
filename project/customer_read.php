@@ -50,7 +50,7 @@
         $num = $stmt->rowCount();
 
         // link to create record form
-        echo "<a href='customers_create.php' class='btn btn-primary mb-3'>Create New Customer</a>";
+        echo "<a href='customer_create.php' class='btn btn-primary mb-3'>Create New Customer</a>";
 
         echo '<div class="p-3">
         <form method="GET" action="">
