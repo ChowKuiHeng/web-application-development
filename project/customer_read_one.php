@@ -8,14 +8,13 @@
 </head>
 
 <body>
-    <!-- Navigation Menu -->
-    <?php
-    include 'menu/navigation.php';
-    ?>
-
-
+  
     <!-- container -->
-    <div class="container">
+    <div class="container">   
+    <!-- Navigation Menu -->
+        <?php
+        include 'menu/navigation.php';
+        ?>
         <div class="page-header">
             <h1>Read Customer</h1>
         </div>
