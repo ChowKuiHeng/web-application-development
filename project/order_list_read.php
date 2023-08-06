@@ -63,11 +63,16 @@
                 echo "<td>{$order_id}</td>";
                 echo "<td>{$firstname} {$lastname}</td>";
                 echo "<td>{$order_date}</td>";
-                echo "<td class='col-2'>";
+                echo "<td>";
+            
                 echo "<a href='order_details_read.php?id={$order_id}' class='btn btn-info m-r-1em text-white mx-2'>Read Order Details</a>";
-                echo "</td>";
 
+                echo "<a href='order_update.php?order_id={$order_id}' class='btn btn-primary m-r-1em mx-2'>Edit</a>";
+          
+                echo "</td>";
                 echo "</tr>";
+            
+           
             }
             echo "</table>";
             echo "</div>";
