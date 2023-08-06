@@ -9,13 +9,14 @@
 </head>
 
 <body>
-    <!-- Navigation Menu -->
-    <?php
-    include 'menu/navigation.php';
-    ?>
+
 
     <!-- Container -->
-    <div class="container mt-5">
+    <div class="container">
+        <!-- Navigation Menu -->
+        <?php
+        include 'menu/navigation.php';
+        ?>
         <div class="page-header">
             <h1>Update product</h1>
         </div>
