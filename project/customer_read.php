@@ -105,7 +105,7 @@
                 echo "<a href='customer_read_one.php?id={$id}' class='btn btn-info me-3'>Read</a>";
 
                 // we will use these links in the next part of this post
-                echo "<a href='product_update.php?id={$id}' class='btn btn-primary me-3'>Edit</a>";
+                echo "<a href='customer_update.php?id={$id}' class='btn btn-primary me-3'>Edit</a>";
 
                 // we will use this links in the next part of this post
                 echo "<a href='#' onclick='delete_product({$id});' class='btn btn-danger me-3'>Delete</a>";
