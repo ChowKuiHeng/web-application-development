@@ -8,13 +8,14 @@
 </head>
 
 <body>
+  
+
+    <!-- Container -->
+    <div class="container">  
     <!-- Navigation Menu -->
     <?php
     include 'menu/navigation.php';
     ?>
-
-    <!-- Container -->
-    <div class="container mt-5">
         <div class="page-header">
             <h1>Create New Order</h1>
         </div>
