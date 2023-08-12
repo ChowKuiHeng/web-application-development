@@ -1,3 +1,5 @@
+<?php include "session.php" ?>
+
 <!DOCTYPE HTML>
 <html>
 
@@ -8,9 +10,7 @@
 
 <body>
     <div class="container p-0 bg-light">
-        <?php
-        include 'menu/navigation.php';
-        ?>
+        <?php include 'menu/navigation.php'; ?>
 
         <div class="page-header p-3 pb-1">
             <h1>Read Product</h1>
@@ -19,33 +19,54 @@
         <?php
         $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
         include 'config/database.php';
-        $query = "SELECT order_details.detail_id, order_details.order_id, products.name, order_details.quantity FROM order_details INNER JOIN products ON order_details.product_id = products.id WHERE order_details.order_id =:id";
+
+        $query = "SELECT customers.username, products.id, products.name, products.promotion_price, products.price, order_summary.customer_id, order_summary.order_date, order_details.detail_id, order_details.order_id, order_details.product_id, order_details.quantity FROM order_details INNER JOIN products ON products.id = order_details.product_id INNER JOIN order_summary ON order_summary.order_id = order_details.order_id INNER JOIN customers ON customers.id = order_summary.customer_id WHERE order_details.order_id = :id";
+
         $stmt = $con->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
         $num = $stmt->rowCount();
 
         if ($num > 0) {
+            $totalamount = 0;
             echo "<div class='p-3'>";
             echo "<table class='table table-hover table-responsive table-bordered'>";
             echo "<tr>";
-            echo "<th>OrderDetail ID</th>";
-            echo "<th>Order ID</th>";
+            echo "<th>User Name</th>";
             echo "<th>Product Name</th>";
+            echo "<th>Promotion Price</th>";
             echo "<th>Quantity</th>";
-            // echo "<th>Action</th>";
+            echo "<th>Total Price</th>";
             echo "</tr>";
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
+                $totalprice = ($promotion_price > 0) ? $promotion_price * $quantity : $price * $quantity;
+                $totalamount += $totalprice;
                 echo "<tr>";
-                echo "<td>{$detail_id}</td>";
-                echo "<td>{$order_id}</td>";
+                echo "<td>{$username}</td>";
                 echo "<td>{$name}</td>";
-                echo "<td>{$quantity}</td>";
+                echo "<td class='text-end'>";
+                if (!empty($promotion_price)) {
+                    // Display promotion price if available
+                    echo "<div class='text-decoration-line-through'>{$price} </div>";
+                    echo number_format($promotion_price, 2);
+                } else {
+                    // Display regular price
+                    echo number_format($price, 2);
+                }
+
+                echo "</td>";
+                echo "<td class='text-end'>{$quantity}</td>";
+                echo "<td class='text-end'>" . number_format($totalprice, 2) . " </td>";
                 echo "</tr>";
             }
+            echo "<tr>";
+            echo "<td colspan='4' class='text-end'><strong>Total amount: </strong></td>";
+            echo "<td class='text-end'>" . number_format($totalamount, 2) . "</td>";
+            echo "</tr>";
             echo "</table>";
+
             echo "<a href='order_list_read.php' class='btn btn-danger'>Back to order list</a>";
             echo "</div>";
         } else {

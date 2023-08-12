@@ -1,3 +1,5 @@
+<?php include "session.php"?>
+
 <!DOCTYPE HTML>
 <html>
 
@@ -50,7 +52,9 @@
 
             $noduplicate = array_unique($product_id);
 
-            if (sizeof($noduplicate) != sizeof($product_id)) {
+            if (sizeof($noduplicate) != sizeof($product_id)) {       
+                        //key  //val
+                //Array ( [0] => 1 [1] => 2 [2] => 3 )
                 foreach ($product_id as $key => $val) {
                     if (!array_key_exists($key, $noduplicate)) {
                         $errors[] = "Duplicated products have been chosen which is " . $products[$val - 1]['name'] . ".";
@@ -60,7 +64,7 @@
             }
             $product_id = array_values($noduplicate);
             $quantity = array_values($quantity);
-
+                                    //如果有duplicate就算                         //没有就跑这个
             $selected_product_count = isset($noduplicate) ? count($noduplicate) : count($order_details);
 
             try {
@@ -135,6 +139,7 @@
                                     <option value="">Choose a Product</option>
                                     <?php
                                     for ($i = 0; $i < count($products); $i++) {
+                                                                                                         //一样就出来        不一样就不出
                                         $product_selected = $products[$i]['id'] == $order_details[$x]['product_id'] ? "selected" : "";
                                         echo "<option value='{$products[$i]['id']}' $product_selected>{$products[$i]['name']}</option>";
                                     }
