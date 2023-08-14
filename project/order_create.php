@@ -10,14 +10,14 @@
 </head>
 
 <body>
-  
+
 
     <!-- Container -->
-    <div class="container">  
-    <!-- Navigation Menu -->
-    <?php
-    include 'menu/navigation.php';
-    ?>
+    <div class="container">
+        <!-- Navigation Menu -->
+        <?php
+        include 'menu/navigation.php';
+        ?>
         <div class="page-header">
             <h1>Create New Order</h1>
         </div>
@@ -27,6 +27,13 @@
         // Include database connection
         date_default_timezone_set('asia/Kuala_Lumpur');
         include 'config/database.php';
+
+        // Fetch products from the database
+        $query = "SELECT * FROM products";
+        $stmt = $con->prepare($query);
+        $stmt->execute();
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
         if ($_POST) {
             try {
@@ -80,12 +87,21 @@
                     echo "</div>";
                 } else {
                     $customer = $_POST['customer'];
+                    date_default_timezone_set('Asia/Kuala_Lumpur');
                     $order_date = date('Y-m-d H:i:s'); // get the current date and time
 
+                    $total_amount = 0;
+                    for ($x = 0; $x < $selected_product_count; $x++) {
+                        $amount =  ($products[$product_id[$x] - 1]['promotion_price'] != 0) ?  $products[$product_id[$x] - 1]['promotion_price'] * $quantity_array[$x] : $products[$product_id[$x] - 1]['price'] * $quantity_array[$x];
+
+                        $total_amount += $amount;
+                    }
+
                     // Insert into order_summary table
-                    $summary_query = "INSERT INTO order_summary SET customer_id=:customer, order_date=:order_date";
+                    $summary_query = "INSERT INTO order_summary SET customer_id=:customer, total_amount=:total_amount, order_date=:order_date";
                     $summary_stmt = $con->prepare($summary_query);
                     $summary_stmt->bindParam(':customer', $customer);
+                    $summary_stmt->bindParam(":total_amount", $total_amount);
                     $summary_stmt->bindParam(':order_date', $order_date);
                     $summary_stmt->execute();
 
@@ -155,11 +171,6 @@
                             <select class='form-select' name='product[]' aria-label=".form-select-lg example">
                                 <option value=''>Select a products</option>";
                                 <?php
-
-                                $query = "SELECT id, name FROM products";
-                                $stmt = $con->prepare($query);
-                                $stmt->execute();
-                                $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 for ($i = 0; $i < count($products); $i++) {
                                     $product_selected = isset($_POST["product"]) && $products[$i]['id'] == $_POST["product"][$x] ? "selected" : "";
                                     echo "<option value='{$products[$i]['id']}' $product_selected>{$products[$i]['name']}</option>";
