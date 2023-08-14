@@ -18,7 +18,7 @@
         </div>
 
         <?php
-   
+
         include 'config/database.php';
 
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
@@ -66,15 +66,15 @@
                 echo "<td>{$firstname} {$lastname}</td>";
                 echo "<td>{$order_date}</td>";
                 echo "<td>";
-            
-                echo "<a href='order_details_read.php?id={$order_id}' class='btn btn-info m-r-1em text-white mx-2'>Read Order Details</a>";
 
-                echo "<a href='order_update.php?order_id={$order_id}' class='btn btn-primary m-r-1em mx-2'>Edit</a>";
-          
+                echo "<a href='order_details_read.php?id={$order_id}' class='btn btn-info m-r-1em text-white mx-2'>Read Order Details</a>";
+             
+                echo "<a href='order_update.php?order_id={$order_id}' class='btn btn-primary me-3'>Edit</a>";
+
+                echo "<a href='#' onclick='delete_product({$order_id});'  class='btn btn-danger'>Delete</a>";
+
                 echo "</td>";
                 echo "</tr>";
-            
-           
             }
             echo "</table>";
             echo "</div>";
@@ -85,6 +85,17 @@
         }
         ?>
     </div>
+
+    <script type='text/javascript'>
+        // confirm record deletion
+        function delete_product(id) {
+            if (confirm('Are you sure?')) {
+                // if user clicked ok,
+                // pass the id to delete.php and execute the delete query
+                window.location = 'order_delete.php?id=' + id;
+            }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 
