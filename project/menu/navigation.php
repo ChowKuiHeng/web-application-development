@@ -1,3 +1,11 @@
+<?php
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-info">
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
@@ -42,6 +50,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="contactus.php">Contact us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="?logout=true">Logout</a>
             </li>
         </ul>
     </div>
