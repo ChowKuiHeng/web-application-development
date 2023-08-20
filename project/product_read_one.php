@@ -33,7 +33,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price,categories_name, promotion_price , manufacture_date,expired_date FROM products WHERE id = :id ";
+            $query = "SELECT id, name, description, price,categories_name, promotion_price , manufacture_date,expired_date,image FROM products WHERE id = :id ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -53,6 +53,8 @@
             $promotion_price = $row['promotion_price'];
             $manufacture_date = $row['manufacture_date'];
             $expired_date = $row['expired_date'];
+            $image = $row['image'];
+
             // shorter way to do that is extract($row)
         }
 
@@ -93,6 +95,16 @@
             <tr>
                 <td>Expired Date</td>
                 <td><?php echo htmlspecialchars($expired_date, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Image</td>
+                <td><?php
+                        if ($image != "") {
+                            echo '<img src="uploads/' . htmlspecialchars($image, ENT_QUOTES) . '">';
+                        } else {
+                            echo '<img src="img/product_coming_soon.jpg" alt="image">';
+                        }
+                        ?></td>
             </tr>
             <tr>
                 <td></td>

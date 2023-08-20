@@ -22,7 +22,7 @@
         include 'config/database.php';
 
         try {
-            $query = "SELECT id, username, password, firstname, lastname, email, gender, date_of_birth, account_status FROM customers WHERE id = ? LIMIT 0,1";
+            $query = "SELECT id, username, password, firstname, lastname, email, gender, date_of_birth, account_status, image FROM customers WHERE id = ? LIMIT 0,1";
             $stmt = $con->prepare($query);
 
             $stmt->bindParam(1, $id);
@@ -39,6 +39,7 @@
             $gender = $row['gender'];
             $date_of_birth = $row['date_of_birth'];
             $account_status = $row['account_status'];
+            $image = $row['image'];
         }
 
         // show errors
@@ -48,7 +49,7 @@
         if ($_POST) {
             try {
                 $query = "UPDATE customers
-                SET username=:username, firstname=:firstname, lastname=:lastname, gender=:gender, date_of_birth=:date_of_birth, email=:email, account_status=:account_status";
+                SET username=:username, firstname=:firstname, lastname=:lastname, gender=:gender, date_of_birth=:date_of_birth, email=:email, account_status=:account_status, image=:image";
                 // prepare query for excecution
 
                 // posted values
@@ -112,9 +113,65 @@
                     $stmt->bindParam(':date_of_birth', $date_of_birth);
                     $stmt->bindParam(':email', $email);
                     $stmt->bindParam(':account_status', $account_status);
+                    $stmt->bindParam(':image', $image);
                     // Execute the query
                     if ($stmt->execute()) {
                         echo "<div class='alert alert-success'>Record was updated.</div>";
+                         // now, if image is not empty, try to upload the image
+                         if ($image) {
+                            // upload to file to folder
+                            $target_directory = "uploads/";
+                            $target_file = $target_directory . $image;
+                            $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
+                            // error message is empty
+                            $file_upload_error_messages = "";
+                            // make sure that file is a real image
+                            $check = getimagesize($_FILES["image"]["tmp_name"]);
+                            if ($check !== false) {
+                                // submitted file is an image
+                            } else {
+                                $file_upload_error_messages .= "<div>Submitted file is not an image.</div>";
+                            }
+                            // make sure certain file types are allowed
+                            $allowed_file_types = array("jpg", "jpeg", "png", "gif");
+                            if (!in_array($file_type, $allowed_file_types)) {
+                                $file_upload_error_messages .= "<div>Only JPG, JPEG, PNG, GIF files are allowed.</div>";
+                            }
+                            // make sure file does not exist
+                            if (file_exists($target_file)) {
+                                $file_upload_error_messages = "<div>Image already exists. Try to change file name.</div>";
+                            }
+                            // make sure submitted file is not too large, can't be larger than 1 MB
+                            if ($_FILES['image']['size'] > (1024000)) {
+                                $file_upload_error_messages .= "<div>Image must be less than 1 MB in size.</div>";
+                            }
+                            // make sure the 'uploads' folder exists
+                            // if not, create it
+                            if (!is_dir($target_directory)) {
+                                mkdir($target_directory, 0777, true);
+                            }
+                            // if $file_upload_error_messages is still empty
+                            if (empty($file_upload_error_messages)) {
+                                // it means there are no errors, so try to upload the file
+                                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                    // it means photo was uploaded
+                                } else {
+                                    echo "<div class='alert alert-danger'>";
+                                    echo "<div>Unable to upload photo.</div>";
+                                    echo "<div>Update the record to upload photo.</div>";
+                                    echo "</div>";
+                                }
+                            }
+
+                            // if $file_upload_error_messages is NOT empty
+                            else {
+                                // it means there are some errors, so show them to user
+                                echo "<div class='alert alert-danger'>";
+                                echo "<div>{$file_upload_error_messages}</div>";
+                                echo "<div>Update the record to upload photo.</div>";
+                                echo "</div>";
+                            }
+                        }
                     } else {
                         echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
                     }
@@ -126,7 +183,7 @@
             }
         } ?>
 
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post" enctype="multipart/form-data">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>User Name</td>
@@ -183,6 +240,20 @@
                 <tr>
                     <td>Email</td>
                     <td><input type='email' name='email' value="<?php echo htmlspecialchars($email, ENT_QUOTES); ?>" class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Photo</td>
+                    <td>
+                        <?php
+                        if ($image != "") {
+                            echo '<img src="uploads/' . htmlspecialchars($image, ENT_QUOTES) . '">';
+                        } else {
+                            echo '<img src="img/customer_coming_soon.jpg" alt="image">';
+                        }
+                        ?>
+                        <br>
+                        <input type="file" name="image" class="form-control-file">
+                    </td>
                 </tr>
                 <tr>
                     <td></td>

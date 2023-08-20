@@ -33,7 +33,7 @@
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, username, firstname, lastname, email,gender, date_of_birth, account_status FROM customers WHERE id = :id ";
+            $query = "SELECT id, username, firstname, lastname, email,gender, date_of_birth, account_status, image FROM customers WHERE id = :id ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
@@ -53,6 +53,7 @@
             $gender = $row['gender'];
             $date_of_birth = $row['date_of_birth'];
             $account_status = $row['account_status'];
+            $image = $row['image'];
             // shorter way to do that is extract($row)
         }
 
@@ -93,6 +94,16 @@
             <tr>
                 <td>Account Status</td>
                 <td><?php echo htmlspecialchars($account_status, ENT_QUOTES);  ?></td>
+            </tr>
+            <tr>
+                <td>Image</td>
+                <td><?php
+                        if ($image != "") {
+                            echo '<img src="uploads/' . htmlspecialchars($image, ENT_QUOTES) . '">';
+                        } else {
+                            echo '<img src="img/customer_coming_soon.jpg" alt="image">';
+                        }
+                        ?></td>
             </tr>
             <tr>
                 <td></td>
