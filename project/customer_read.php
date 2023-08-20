@@ -10,14 +10,14 @@
 </head>
 
 <body>
- 
+
 
     <!-- container -->
-    <div class="container">   
-    <!-- Navigation Menu -->
-    <?php
-    include 'menu/navigation.php';
-    ?>
+    <div class="container">
+        <!-- Navigation Menu -->
+        <?php
+        include 'menu/navigation.php';
+        ?>
         <div class="page-header">
             <h1>Read Customer</h1>
         </div>
@@ -28,13 +28,18 @@
         include 'config/database.php';
 
         // delete message prompt will be here
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+        // if it was redirected from delete.php
+        if ($action == 'deleted') {
+            echo "<div class='alert alert-success'>Record was deleted.</div>";
+        }
 
-        // select all data
+        if ($action == 'failed') {
+            echo "<div class='alert alert-danger'>This customer make a order.</div>";
+        }
 
-        // $query = "SELECT id, username, firstname, lastname, gender, date_of_birth, account_status FROM customers ORDER BY id DESC";
-        // $stmt = $con->prepare($query);
-        // $stmt->execute();
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
+        // select all data
         $query = "SELECT id, username, firstname, lastname,  email, gender, date_of_birth, account_status FROM customers";
         if (!empty($searchKeyword)) {
             $query .= " WHERE id LIKE :keyword OR username LIKE :keyword OR firstname LIKE :keyword OR lastname LIKE :keyword OR email LIKE :keyword OR gender LIKE :keyword OR date_of_birth LIKE :keyword OR account_status LIKE :keyword";

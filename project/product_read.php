@@ -28,9 +28,13 @@
         // delete message prompt will be here
         $action = isset($_GET['action']) ? $_GET['action'] : "";
 
-        // if it was redirected from delete.php
-        if ($action == 'deleted') {
+         // if it was redirected from delete.php
+         if ($action == 'deleted') {
             echo "<div class='alert alert-success'>Record was deleted.</div>";
+        }
+
+        if ($action == 'failed') {
+            echo "<div class='alert alert-danger'>This product has been ordered.</div>";
         }
 
 

@@ -10,13 +10,13 @@
 </head>
 
 <body>
- 
+
     <!-- container -->
-    <div class="container">   
-    <!-- Navigation Menu -->
-    <?php
-    include 'menu/navigation.php';
-    ?>
+    <div class="container">
+        <!-- Navigation Menu -->
+        <?php
+        include 'menu/navigation.php';
+        ?>
 
         <div class="page-header">
             <h1>Categories Read</h1>
@@ -28,6 +28,17 @@
         include 'config/database.php';
 
         // delete message prompt will be here
+        $action = isset($_GET['action']) ? $_GET['action'] : "";
+
+        // if it was redirected from delete.php
+        if ($action == 'deleted') {
+            echo "<div class='alert alert-success'>Record was deleted.</div>";
+        }
+
+        if ($action == 'failed') {
+            echo "<div class='alert alert-danger'>There are products inside this Category.</div>";
+        }
+
 
 
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
@@ -95,7 +106,7 @@
                 echo "<a href='categories_update.php?id={$id}' class='btn btn-primary me-3'>Edit</a>";
 
                 // we will use this links in the next part of this post
-                echo "<a href='#' onclick='delete_product({$id});' class='btn btn-danger me-3'>Delete</a>";
+                echo "<a href='#' onclick='categories_delete({$id});' class='btn btn-danger me-3'>Delete</a>";
                 echo "</td>";
                 echo "</tr>";
             }
@@ -112,7 +123,7 @@
     <!-- confirm delete record will be here -->
     <script type='text/javascript'>
         // confirm record deletion
-        function delete_product(id) {
+        function categories_delete(id) {
             if (confirm('Are you sure?')) {
                 // if user clicked ok,
                 // pass the id to delete.php and execute the delete query
