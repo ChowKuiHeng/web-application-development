@@ -63,6 +63,10 @@
                 $date_of_birth = $_POST['date_of_birth'];
                 $email = htmlspecialchars(strip_tags($_POST['email']));
                 $account_status = $_POST['account_status'];
+                $image = !empty($_FILES["image"]["name"])
+                ? sha1_file($_FILES['image']['tmp_name']) . "-" . basename($_FILES["image"]["name"])
+                : "";
+                $image = htmlspecialchars(strip_tags($image));
 
                 $errors = array();
                 // check !empty, check format, compare new and confirm, then old compare db, old compare new.(password)
