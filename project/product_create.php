@@ -10,14 +10,14 @@
 </head>
 
 <body>
-   
+
 
     <!-- Container -->
-    <div class="container"> 
-    <!-- Navigation Menu -->
-    <?php
-    include 'menu/navigation.php';
-    ?>
+    <div class="container">
+        <!-- Navigation Menu -->
+        <?php
+        include 'menu/navigation.php';
+        ?>
         <div class="page-header">
             <h1>Create Product</h1>
         </div>
@@ -28,7 +28,7 @@
         include 'config/database.php';
 
         if ($_POST) {
-            try { 
+            try {
                 $name = $_POST['name'];
                 $description = $_POST['description'];
                 $price = $_POST['price'];
@@ -84,31 +84,15 @@
                         echo "<p class='error-message'>$error</p>";
                     }
                     echo "</div>";
-                } else {
-                    $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created,  promotion_price=:promotion_price , manufacture_date=:manufacture_date, expired_date=:expired_date, categories_name=:categories_name , image=:image";
-                    $stmt = $con->prepare($query);
-                    $created = date('Y-m-d H:i:s');
-                    $stmt->bindParam(':name', $name);
-                    $stmt->bindParam(':description', $description);
-                    $stmt->bindParam(':price', $price);
-                    $stmt->bindParam(':created', $created);
-                    $stmt->bindParam(':promotion_price', $promotion_price);
-                    $stmt->bindParam(':manufacture_date', $manufacture_date);
-                    $stmt->bindParam(':expired_date', $expired_date);
-                    $stmt->bindParam(':categories_name', $categories_name);
-                    $stmt->bindParam(':image', $image);
+                } else {   // now, if image is not empty, try to upload the image
+                    if ($image) {
+                        // upload to file to folder
+                        $target_directory = "uploads/";
+                        $target_file = $target_directory . $image;
+                        $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
+                        // error message is empty
+                        $file_upload_error_messages = "";
 
-                    if ($stmt->execute()) {
-                        echo "<div class='alert alert-success'>Record was saved.</div>";
-                        // now, if image is not empty, try to upload the image
-                        if ($image) {
-                            // upload to file to folder
-                            $target_directory = "uploads/";
-                            $target_file = $target_directory . $image;
-                            $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
-                            // error message is empty
-                            $file_upload_error_messages = "";
-                        }
                         // make sure that file is a real image
                         $check = getimagesize($_FILES["image"]["tmp_name"]);
                         if ($check !== false) {
@@ -155,6 +139,22 @@
                             echo "<div>Update the record to upload photo.</div>";
                             echo "</div>";
                         }
+                    }
+                    $query = "INSERT INTO products SET name=:name, description=:description, price=:price, created=:created,  promotion_price=:promotion_price , manufacture_date=:manufacture_date, expired_date=:expired_date, categories_name=:categories_name , image=:image";
+                    $stmt = $con->prepare($query);
+                    $created = date('Y-m-d H:i:s');
+                    $stmt->bindParam(':name', $name);
+                    $stmt->bindParam(':description', $description);
+                    $stmt->bindParam(':price', $price);
+                    $stmt->bindParam(':created', $created);
+                    $stmt->bindParam(':promotion_price', $promotion_price);
+                    $stmt->bindParam(':manufacture_date', $manufacture_date);
+                    $stmt->bindParam(':expired_date', $expired_date);
+                    $stmt->bindParam(':categories_name', $categories_name);
+                    $stmt->bindParam(':image', $image);
+
+                    if ($stmt->execute()) {
+                        echo "<div class='alert alert-success'>Record was saved.</div>";
                     } else {
                         echo "<div class='alert alert-danger'>Unable to save record.</div>";
                     }
@@ -198,21 +198,21 @@
                 <tr>
                     <td>Categories Name</td>
                     <td> <select class="form-select" name="categories_name"><?php
-                                    // Fetch categories from the database
-                                    $query = "SELECT categories_name FROM categories";
-                                    $stmt = $con->prepare($query);
-                                    $stmt->execute();
-                                    $categories = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                                                                            // Fetch categories from the database
+                                                                            $query = "SELECT categories_name FROM categories";
+                                                                            $stmt = $con->prepare($query);
+                                                                            $stmt->execute();
+                                                                            $categories = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-                                    // Generate select options
-                                    foreach ($categories as $category) {
-                                        echo "<option value='$category'>$category</option>";
-                                    } ?></select>
+                                                                            // Generate select options
+                                                                            foreach ($categories as $category) {
+                                                                                echo "<option value='$category'>$category</option>";
+                                                                            } ?></select>
                     </td>
                 </tr>
                 <tr>
-                <td>Photo</td>
-                <td><input type="file" name="image" /></td>
+                    <td>Photo</td>
+                    <td><input type="file" name="image" /></td>
                 </tr>
                 <td></td>
                 <td>

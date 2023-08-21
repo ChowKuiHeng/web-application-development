@@ -1,35 +1,36 @@
 <?php
 include 'config/database.php';
-try {     
-   
-    $id=isset($_GET['id']) ? $_GET['id'] :  die('ERROR: Record ID not found.');
 
-    $product_exist_query = "SELECT id FROM categories WHERE EXISTS (SELECT categories_name FROM products WHERE products.categories_name = categories.categories_name)";
+try {
+    // Get the ID from the query parameter
+    $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
+
+    // Check if there are related products
+    $product_exist_query = "SELECT COUNT(*) FROM products WHERE categories_name = (SELECT categories_name FROM categories WHERE id = ?)";
     $product_exist_stmt = $con->prepare($product_exist_query);
+    $product_exist_stmt->bindParam(1, $id);
     $product_exist_stmt->execute();
-    $products = $product_exist_stmt->fetchAll(PDO::FETCH_ASSOC);
+    $product_count = $product_exist_stmt->fetchColumn();
 
-    // delete query
-    $query = "DELETE FROM categories WHERE id = ?";
-    $stmt = $con->prepare($query);
-    $stmt->bindParam(1, $id);
-    for ($i = 0; $i < count($products); $i++) {
-        if ($id == $products[$i]['id'])
-            $error = 1;
-    }
-    if (isset($error)) {
+    if ($product_count > 0) {
         header("Location: categories_read.php?action=failed");
-    } else if ($stmt->execute()) {
-        // redirect to read records page and
-        // tell the user record was deleted
-        header("Location: categories_read.php?action=deleted");
-    } else {
-        die('Unable to delete record.');
+        exit(); // Terminate the script
     }
-}
-catch(PDOException $exception){
-    echo "<div class = 'alert alert-danger'>";
-    echo $exception->getMessage();
-    echo "</div>";
+
+    // Delete query
+    $delete_query = "DELETE FROM categories WHERE id = ?";
+    $delete_stmt = $con->prepare($delete_query);
+    $delete_stmt->bindParam(1, $id);
+
+    if ($delete_stmt->execute()) {
+        header("Location: categories_read.php?action=deleted");
+        exit(); // Terminate the script
+    } else {
+        header("Location: categories_read.php?action=error");
+        exit(); // Terminate the script
+    }
+} catch (PDOException $exception) {
+    header("Location: categories_read.php?action=error");
+    exit(); // Terminate the script
 }
 ?>

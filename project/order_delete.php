@@ -20,7 +20,7 @@ try {
     if ($order_details_deleted && $order_summary_deleted) {
         // redirect to read records page and
         // tell the user records were deleted
-        header('Location: order_list.php?action=deleted');
+        header('Location: order_list_read.php?action=deleted');
     } else {
         die('Unable to delete record.');
     }
