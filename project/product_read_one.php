@@ -78,7 +78,7 @@
             </tr>
             <tr>
                 <td>Price</td>
-                <td><?php echo htmlspecialchars($price, ENT_QUOTES);  ?></td>
+                <td><?php echo "RM" . number_format($price,2)  ?></td>
             </tr>
             <tr>
                 <td>Categories Name</td>
@@ -86,7 +86,7 @@
             </tr>
             <tr>
                 <td>Promotion Price</td>
-                <td><?php echo htmlspecialchars($promotion_price, ENT_QUOTES);  ?></td>
+                <td><?php echo "RM" . number_format($promotion_price,2)  ?></td>
             </tr>
             <tr>
                 <td>Manufacture Date</td>
@@ -100,9 +100,9 @@
                 <td>Image</td>
                 <td><?php
                         if ($image != "") {
-                            echo '<img src="uploads/' . htmlspecialchars($image, ENT_QUOTES) . '">';
+                            echo '<img src="uploads/' . htmlspecialchars($image, ENT_QUOTES) . '" width="100">';
                         } else {
-                            echo '<img src="img/product_coming_soon.jpg" alt="image">';
+                            echo '<img src="img/product_coming_soon.jpg" alt="image" width="100">';
                         }
                         ?></td>
             </tr>

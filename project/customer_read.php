@@ -40,7 +40,7 @@
 
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
         // select all data
-        $query = "SELECT id, username, firstname, lastname,  email, gender, date_of_birth, account_status FROM customers";
+        $query = "SELECT id, username, firstname, lastname,  email, gender, date_of_birth, account_status, image FROM customers";
         if (!empty($searchKeyword)) {
             $query .= " WHERE id LIKE :keyword OR username LIKE :keyword OR firstname LIKE :keyword OR lastname LIKE :keyword OR email LIKE :keyword OR gender LIKE :keyword OR date_of_birth LIKE :keyword OR account_status LIKE :keyword";
             $searchKeyword = "%{$searchKeyword}%";
@@ -62,7 +62,7 @@
         echo '<div class="p-3">
         <form method="GET" action="">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="search" placeholder="Search product..." value="' . str_replace('%', '', $searchKeyword) . '">
+                <input type="text" class="form-control" name="search" placeholder="Search username..." value="' . str_replace('%', '', $searchKeyword) . '">
                 <button class="btn btn-primary" type="submit">Search</button>
             </div>
         </form>
@@ -81,9 +81,7 @@
             echo "<th>Firstname</th>";
             echo "<th>Lastname</th>";
             echo "<th>Email</th>";
-            echo "<th>Gender</th>";
-            echo "<th>Date of Birth</th>";
-            echo "<th>Account Status</th>";
+            echo "<th>Image</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -99,11 +97,11 @@
                 echo "<td>{$firstname}</td>";
                 echo "<td>{$lastname}</td>";
                 echo "<td>{$email}</td>";
-                echo "<td>{$gender}</td>";
-                echo "<td>{$date_of_birth}</td>";
-                echo "<td>{$account_status}</td>";
-
-
+                if ($image != "") {
+                    echo '<td><img src="uploads/' . ($image) . '"width="100"></td>';
+                } else {
+                    echo '<td><img src="img/customer_coming_soon.jpg" alt="image" width="100"></td>';
+ }
 
                 echo "</td>";
 

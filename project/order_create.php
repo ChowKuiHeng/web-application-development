@@ -48,7 +48,7 @@
                 if (sizeof($noduplicate) != sizeof($product_id)) {
                     foreach ($product_id as $key => $val) {
                         if (!array_key_exists($key, $noduplicate)) {
-                            $errors[] = "Duplicated products have been chosen ";
+                            $errors[] = "Duplicated products have been chosen";
                             array_splice($product_id, $key, 1);
                             array_splice($quantity_array, $key, 1);
                         }

@@ -1,4 +1,4 @@
-<?php include "session.php"?>
+<?php include "session.php" ?>
 
 <!DOCTYPE HTML>
 <html>
@@ -52,19 +52,20 @@
 
             $noduplicate = array_unique($product_id);
 
-            if (sizeof($noduplicate) != sizeof($product_id)) {       
-                        //key  //val
+            if (sizeof($noduplicate) != sizeof($product_id)) {
+                //key  //val
                 //Array ( [0] => 1 [1] => 2 [2] => 3 )
                 foreach ($product_id as $key => $val) {
                     if (!array_key_exists($key, $noduplicate)) {
-                        $errors[] = "Duplicated products have been chosen which is " . $products[$val - 1]['name'] . ".";
+                        $errors[] = "Duplicated products have been chosen";
                         unset($quantity[$key]);
                     }
                 }
             }
             $product_id = array_values($noduplicate);
             $quantity = array_values($quantity);
-                                    //如果有duplicate就算                         //没有就跑这个
+
+            //如果有duplicate就算                         //没有就跑这个
             $selected_product_count = isset($noduplicate) ? count($noduplicate) : count($order_details);
 
             try {
@@ -116,7 +117,7 @@
         ?>
         <div>
             <form action="" method="post">
-                <input type="text" class="form-control-lg" value="<?php echo $customers[$order_summaries['customer_id']-1]['username'] ?>">
+                <input type="text" class="form-control-lg" value="<?php echo $customers[$order_summaries['customer_id'] - 1]['username'] ?>">
                 <table class="table table-hover table-responsive table-bordered" id="row_del">
                     <tr>
                         <th>NO.</th>
@@ -126,7 +127,7 @@
                     </tr>
                     <?php
 
-                    $product_loop = empty($error) ? count($order_details) : count($noduplicate);
+                    $product_loop = empty($error) ? count($order_details) : count($product_id);
                     for ($x = 0; $x < $product_loop; $x++) {
 
                     ?>
@@ -139,15 +140,25 @@
                                     <option value="">Choose a Product</option>
                                     <?php
                                     for ($i = 0; $i < count($products); $i++) {
-                                                                                                         //一样就出来        不一样就不出
-                                        $product_selected = $products[$i]['id'] == $order_details[$x]['product_id'] ? "selected" : "";
+                                        //一样就出来        不一样就不出
+                                        if ($_POST) {
+                                            if ($product_id[$x] == $products[$i]['id']) {
+                                                $product_selected = "selected";
+                                            } else {
+                                                $product_selected = '';
+                                            }
+                                        } else if ($products[$i]['id'] == $order_details[$x]['product_id']) {
+                                            $product_selected = "selected";
+                                        } else {
+                                            $product_selected = '';
+                                        }
                                         echo "<option value='{$products[$i]['id']}' $product_selected>{$products[$i]['name']}</option>";
                                     }
                                     ?>
                                 </select>
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="quantity[]" id="quantity" value="<?php echo $order_details[$x]['quantity'] ?>">
+                                <input type="number" class="form-control" name="quantity[]" id="quantity" value="<?php echo isset($quantity) ? $quantity[$x] : $order_details[$x]['quantity'] ?>">
 
                             </td>
                             <td>
@@ -178,6 +189,9 @@
                         var lastRow = rows[rows.length - 1];
                         // Clone the last row
                         var clone = lastRow.cloneNode(true);
+                        const [productsSelect, quantityInput] = clone.querySelectorAll('select[name="product[]"], input[name="quantity[]"]');
+                        productsSelect.value = "";
+                        quantityInput.value = 1;
                         // Insert the clone after the last row
                         lastRow.insertAdjacentElement('afterend', clone);
 

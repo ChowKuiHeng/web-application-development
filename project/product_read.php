@@ -37,14 +37,8 @@
             echo "<div class='alert alert-danger'>This product has been ordered.</div>";
         }
 
-
-        // // select all data
-        // $query = "SELECT id, name, description, price, promotion_price FROM products ORDER BY id DESC";
-        // $stmt = $con->prepare($query);
-        // $stmt->execute();
-
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
-        $query = "SELECT id, name, description, price,categories_name, promotion_price FROM products";
+        $query = "SELECT id, name, description, price,categories_name, promotion_price, image FROM products";
         if (!empty($searchKeyword)) {
             $query .= " WHERE name LIKE :keyword";
             $searchKeyword = "%{$searchKeyword}%";
@@ -85,6 +79,7 @@
             echo "<th>Description</th>";
             echo "<th>Price</th>";
             echo "<th>Categories Name</th>";
+            echo "<th>Image</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -103,16 +98,21 @@
                 echo "<td class='text-end'>";
                 if (!empty($promotion_price)) {
                     // Display promotion price if available
-                    echo "<div class='text-decoration-line-through'>{$price} </div>";
-                    echo number_format($promotion_price, 2);
+                    echo "<div class='text-decoration-line-through'> RM" . number_format($price,2) . "</div>";
+                    echo 'RM'  . number_format($promotion_price, 2);
                     echo "(Promotion Price)";
                 } else {
                     // Display regular price
-                    echo number_format($price, 2);
+                    echo 'RM'  . number_format($price, 2);
                 }
 
                 echo "</td>";
                 echo "<td>{$categories_name}</td>";
+                if ($image != "") {
+                    echo '<td><img src="uploads/' . ($image) . '"width="100"></td>';
+                } else {
+                    echo '<td><img src="img/product_coming_soon.jpg" alt="image" width="100"></td>';
+ }
                 echo "<td>";
                 // read one record
                 echo "<a href='product_read_one.php?id={$id}' class='btn btn-info me-3'>Read</a>";

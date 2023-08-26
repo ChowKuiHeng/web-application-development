@@ -49,21 +49,21 @@
                 echo "<td class='text-end'>";
                 if (!empty($promotion_price)) {
                     // Display promotion price if available
-                    echo "<div class='text-decoration-line-through'>{$price} </div>";
-                    echo number_format($promotion_price, 2);
+                    echo "<div class='text-decoration-line-through'> RM" . number_format($price,2) . "</div>";
+                    echo 'RM'  . number_format($promotion_price, 2);
                 } else {
                     // Display regular price
-                    echo number_format($price, 2);
+                    echo 'RM'  .number_format($price, 2);
                 }
 
                 echo "</td>";
                 echo "<td class='text-end'>{$quantity}</td>";
-                echo "<td class='text-end'>" . number_format($totalprice, 2) . " </td>";
+                echo "<td class='text-end'>RM" . number_format($totalprice, 2) . " </td>";
                 echo "</tr>";
             }
             echo "<tr>";
             echo "<td colspan='4' class='text-end'><strong>Total amount: </strong></td>";
-            echo "<td class='text-end'>" . number_format($totalamount, 2) . "</td>";
+            echo "<td class='text-end'>RM" . number_format($totalamount, 2) . "</td>";
             echo "</tr>";
             echo "</table>";
 

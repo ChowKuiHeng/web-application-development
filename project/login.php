@@ -1,23 +1,25 @@
 <?php
 session_start();
 if (isset($_SESSION['customer_id'])) {
-  header("Location: index.php");
-  exit();
+    header("Location: index.php");
+    exit();
 }
 ?>
 
 <!DOCTYPE HTML>
 <html>
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet" href="css/login.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 
 <body>
     <!-- Container -->
-    <div class="container mt-5">
+    <div class="container">
 
         <!-- PHP insert code will be here -->
         <?php
@@ -89,53 +91,26 @@ if (isset($_SESSION['customer_id'])) {
         ?>
 
         <!-- HTML form here where the product information will be entered -->
-        <form action="" method="POST">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                Login Form
-                            </div>
-                            <div class="card-body">
-                                <form>
-                                    <div class="form-group mb-3 ">
-                                        <label for="text">Username</label>
-                                        <input type="text" name="username_enter" class="form-control" id="username_enter">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label for="password">Password</label>
-                                        <input type="password" name="password_enter" class="form-control" id="password_enter">
-                                    </div>
-                                    <input type='submit' value='Login' class='btn btn-primary' />
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="row justify-content-center align-items-center position-absolute top-50 start-50 translate-middle w-75">
+            <div class="col-md-6 text-center">
+                <img src="img/88speedmart.jpg" alt="88 Speedmart" class="img-fluid">
             </div>
+            <div class="col">
+                <form action="" method="POST" class="d-flex flex-column">
+                    <div class="form-group">
+                        <h1 style="color:#000000;">Welcome to 88 Speedmart</h1>
+                        <label for="username_enter" style="color:#000000; " >Username</label>
+                        <input type="text" name="username_enter" class="form-control border mb-3" id="username_enter">
 
-            <!-- <table class='table table-hover table-responsive table-bordered'>
-                <tr>
-                    <td>Username</td>
-                    <td><input type="text" name="username_enter" class="form-control" id="username_enter"></td>
-                </tr>
-                <tr>
-                    <td>Password</td>
-                    <td><input type="password" name="password_enter" class="form-control" id="password_enter"></td>
-
-                </tr>
-                <td></td>
-                <td>
-                    <input type='submit' value='Login' class='btn btn-primary' />
-                </td>
-                </tr>
-
-
-            </table> -->
-        </form>
-
+                        <label for="password_enter" style="color:#000000;">Password</label>
+                        <input type="password" name="password_enter" class="form-control border mb-3" id="password_enter">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block w-25 mb-3">Login</button>
+                </form>
+            </div>
+        </div>
     </div>
+
     <!-- end .container -->
 
     <!-- Bootstrap JavaScript -->
