@@ -80,7 +80,6 @@
             echo "<tr>";
             echo "<th>ID</th>";
             echo "<th>Categories Name</th>";
-            echo "<th>Description</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -92,16 +91,11 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$id}</td>";
-                echo "<td>{$categories_name}</td>";
-                echo "<td>{$description}</td>";
-
+                echo "<td><a href='categories_read_one.php?id={$id}' class='link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-dark link-dark'>{$categories_name}</a></td>";
 
                 echo "</td>";
 
                 echo "<td>";
-                // read one record
-                echo "<a href='categories_read_one.php?id={$id}' class='btn btn-info me-3'>Read</a>";
-
                 // we will use these links in the next part of this post
                 echo "<a href='categories_update.php?id={$id}' class='btn btn-primary me-3'>Edit</a>";
 

@@ -27,16 +27,28 @@
         $stmt->execute();
         $num = $stmt->rowCount();
 
+        $customerQuery = "SELECT order_summary.order_date, customers.firstname, customers.lastname FROM order_details INNER JOIN order_summary ON order_details.order_id = order_summary.order_id INNER JOIN customers ON order_summary.customer_id = id WHERE order_details.order_id = :id ORDER BY order_details.detail_id ASC";
+        $customerStmt = $con->prepare($customerQuery);
+        $customerStmt->bindParam(":id", $id);
+        $customerStmt->execute();
+        $customerRow = $customerStmt->fetch(PDO::FETCH_ASSOC);
+        $firstname = $customerRow['firstname'];
+        $lastname = $customerRow['lastname'];
+        $orderDateTime = $customerRow['order_date'];
+
         if ($num > 0) {
             $totalamount = 0;
             echo "<div class='p-3'>";
             echo "<table class='table table-hover table-responsive table-bordered'>";
             echo "<tr>";
-            echo "<th>User Name</th>";
+            echo "<div class='pt-2 d-flex justify-content-between'>";
+            echo "<p class='ps-3'><strong>Customer Name: " . $firstname . " " . $lastname . "</strong></p>";
+            echo "<p class='pe-4'><strong>Order Date: " . $orderDateTime . "</strong></p>";
+            echo "</div>";
             echo "<th>Product Name</th>";
-            echo "<th>Promotion Price</th>";
-            echo "<th>Quantity</th>";
-            echo "<th>Total Price</th>";
+            echo "<th class='text-end'>Price</th>";
+            echo "<th class='text-end'>Quantity</th>";
+            echo "<th class='text-end'>Total Price</th>";
             echo "</tr>";
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -44,16 +56,15 @@
                 $totalprice = ($promotion_price > 0) ? $promotion_price * $quantity : $price * $quantity;
                 $totalamount += $totalprice;
                 echo "<tr>";
-                echo "<td>{$username}</td>";
                 echo "<td>{$name}</td>";
                 echo "<td class='text-end'>";
                 if (!empty($promotion_price)) {
                     // Display promotion price if available
-                    echo "<div class='text-decoration-line-through'> RM" . number_format($price,2) . "</div>";
+                    echo "<div class='text-decoration-line-through'> RM" . number_format($price, 2) . "</div>";
                     echo 'RM'  . number_format($promotion_price, 2);
                 } else {
                     // Display regular price
-                    echo 'RM'  .number_format($price, 2);
+                    echo 'RM'  . number_format($price, 2);
                 }
 
                 echo "</td>";
@@ -62,7 +73,7 @@
                 echo "</tr>";
             }
             echo "<tr>";
-            echo "<td colspan='4' class='text-end'><strong>Total amount: </strong></td>";
+            echo "<td colspan='3' class='text-end'><strong>Total amount: </strong></td>";
             echo "<td class='text-end'>RM" . number_format($totalamount, 2) . "</td>";
             echo "</tr>";
             echo "</table>";

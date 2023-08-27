@@ -72,7 +72,7 @@
         if ($num > 0) {
 
             // data from database will be here
-            echo "<table class='table table-hover table-responsive table-bordered'>"; //start table
+            echo "<div class='table-responsive'><table class='table table-hover table-bordered'>"; //start table
 
             //creating our table heading
             echo "<tr>";
@@ -93,22 +93,19 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$id}</td>";
-                echo "<td>{$username}</td>";
+                echo "<td><a href='customer_read_one.php?id={$id}' class='link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-dark link-dark'>{$username}</a></td>";
                 echo "<td>{$firstname}</td>";
                 echo "<td>{$lastname}</td>";
                 echo "<td>{$email}</td>";
                 if ($image != "") {
-                    echo '<td><img src="uploads/' . ($image) . '"width="100"></td>';
+                    echo '<td><img src="' . ($image) . '"width="100"></td>';
                 } else {
                     echo '<td><img src="img/customer_coming_soon.jpg" alt="image" width="100"></td>';
- }
+                }
 
                 echo "</td>";
 
                 echo "<td>";
-                // read one record
-                echo "<a href='customer_read_one.php?id={$id}' class='btn btn-info me-3'>Read</a>";
-
                 // we will use these links in the next part of this post
                 echo "<a href='customer_update.php?id={$id}' class='btn btn-primary me-3'>Edit</a>";
 
@@ -119,7 +116,7 @@
             }
 
             // end table
-            echo "</table>";
+            echo "</table></div>";
         } else {
             echo "<div class='alert alert-danger'>No records found.</div>";
         }

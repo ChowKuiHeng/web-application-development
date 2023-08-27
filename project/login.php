@@ -91,7 +91,7 @@ if (isset($_SESSION['customer_id'])) {
         ?>
 
         <!-- HTML form here where the product information will be entered -->
-        <div class="row justify-content-center align-items-center position-absolute top-50 start-50 translate-middle w-75">
+        <div class="container row justify-content-center align-items-center position-absolute top-50 start-50 translate-middle w-75">
             <div class="col-md-6 text-center">
                 <img src="img/88speedmart.jpg" alt="88 Speedmart" class="img-fluid">
             </div>

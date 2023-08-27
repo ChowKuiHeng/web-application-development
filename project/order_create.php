@@ -28,6 +28,11 @@
         date_default_timezone_set('asia/Kuala_Lumpur');
         include 'config/database.php';
 
+        $customer_query = "SELECT id, username FROM customers";
+        $customer_stmt = $con->prepare($customer_query);
+        $customer_stmt->execute();
+        $customers = $customer_stmt->fetchAll(PDO::FETCH_ASSOC);
+
         // Fetch products from the database
         $query = "SELECT * FROM products";
         $stmt = $con->prepare($query);
@@ -44,6 +49,13 @@
                 $customer = $_POST['customer'];
                 $selected_product_count = count($_POST['product']);
                 $noduplicate = array_unique($product_id);
+
+                $status_query = "SELECT * FROM customers WHERE id=?";
+                $status_stmt = $con->prepare($status_query);
+                $status_stmt->bindParam(1, $customer);
+                $status_stmt->execute();
+                $status = $status_stmt->fetch(PDO::FETCH_ASSOC);
+
 
                 if (sizeof($noduplicate) != sizeof($product_id)) {
                     foreach ($product_id as $key => $val) {
@@ -63,7 +75,10 @@
 
                 if (empty($customer)) {
                     $errors[] = "You need to select the customer.";
+                } else if ($status['account_status'] == "Inactive") {
+                    $errors[] = "Inactive account can't make a order";
                 }
+
                 foreach ($product_id as $product) {
                     if (empty($product)) {
                         $errors[] = "Please select a product.";

@@ -44,16 +44,18 @@
                     ? sha1_file($_FILES['image']['tmp_name']) . "-" . basename($_FILES["image"]["name"])
                     : "";
                 $image = htmlspecialchars(strip_tags($image));
-                // upload to file to folder
-                $target_directory = "uploads/";
-                $target_file = $target_directory . $image;
-                //pathinfo找是不是.jpg,.png
-                $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
+
+                $target_file = "";
 
                 $errors = array();
 
                 // now, if image is not empty, try to upload the image
                 if ($image) {
+                    // upload to file to folder
+                    $target_directory = "uploads/";
+                    $target_file = $target_directory . $image;
+                    //pathinfo找是不是.jpg,.png
+                    $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
                     $check = getimagesize($_FILES["image"]["tmp_name"]);
                     $image_width = $check[0];
                     $image_height = $check[1];
@@ -129,7 +131,7 @@
                     $stmt->bindParam(':date_of_birth', $date_of_birth);
                     $stmt->bindParam(':registration_datetime', $registration_datetime);
                     $stmt->bindParam(':account_status', $account_status);
-                    $stmt->bindParam(':image', $image);
+                    $stmt->bindParam(':image', $target_file);
 
 
                     // Execute the query
@@ -138,8 +140,8 @@
                         // make sure the 'uploads' folder exists
                         // if not, create it
                         if ($image) {
-                            if ($target_file != $row['image'] && $row['image'] != "") {
-                                unlink($row['image']);
+                            if ($image && file_exists($target_file)) {
+                                unlink($target_file);
                             }
 
                             // make sure the 'uploads' folder exists
@@ -173,8 +175,7 @@
                         echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
                     }
                 }
-            }
-            catch (PDOException $exception) {
+            } catch (PDOException $exception) {
                 //  die('ERROR: ' . $exception->getMessage());
                 if ($exception->getCode() == 23000) {
                     echo '<div class= "alert alert-danger role=alert">' . 'Username and Email has been taken. Please provide the new one' . '</div>';

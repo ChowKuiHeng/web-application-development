@@ -100,7 +100,7 @@
                 <td>Image</td>
                 <td><?php
                         if ($image != "") {
-                            echo '<img src="uploads/' . htmlspecialchars($image, ENT_QUOTES) . '" width="100">';
+                            echo '<img src="' . htmlspecialchars($image, ENT_QUOTES) . '" width="100">';
                         } else {
                             echo '<img src="img/product_coming_soon.jpg" alt="image" width="100">';
                         }

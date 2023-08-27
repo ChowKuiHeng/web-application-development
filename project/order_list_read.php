@@ -22,7 +22,7 @@
         include 'config/database.php';
 
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
-        $query = "SELECT order_summary.order_id, customers.firstname, customers.lastname, order_summary.order_date FROM order_summary INNER JOIN customers ON order_summary.customer_id = customers.id";
+        $query = "SELECT order_summary.order_id, customers.username,order_summary.order_date FROM order_summary INNER JOIN customers ON order_summary.customer_id = customers.id";
         if (!empty($searchKeyword)) {
             $query .= " WHERE customers.firstname LIKE :keyword OR customers.lastname LIKE :keyword";
             $searchKeyword = "%{$searchKeyword}%";
@@ -51,10 +51,10 @@
 
         if ($num > 0) {
             echo "<div class='p-3'>";
-            echo "<table class='table table-hover table-responsive table-bordered'>";
+            echo "<div class='table-responsive'> <table class='table table-hover table-bordered'>";
             echo "<tr>";
             echo "<th>Order ID</th>";
-            echo "<th>Customer Name</th>";
+            echo "<th>Username</th>";
             echo "<th>Order Date</th>";
             echo "<th>Action</th>";
             echo "</tr>";
@@ -63,12 +63,10 @@
                 extract($row);
                 echo "<tr>";
                 echo "<td>{$order_id}</td>";
-                echo "<td>{$firstname} {$lastname}</td>";
+                echo "<td><a href='order_details_read.php?id={$order_id}' class='link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-dark link-dark'>{$username}</a></td>";
                 echo "<td>{$order_date}</td>";
                 echo "<td>";
-
-                echo "<a href='order_details_read.php?id={$order_id}' class='btn btn-info m-r-1em text-white mx-2'>Read Order Details</a>";
-             
+            
                 echo "<a href='order_update.php?order_id={$order_id}' class='btn btn-primary me-3'>Edit</a>";
 
                 echo "<a href='#' onclick='delete_product({$order_id});'  class='btn btn-danger'>Delete</a>";
@@ -76,7 +74,7 @@
                 echo "</td>";
                 echo "</tr>";
             }
-            echo "</table>";
+            echo "</table></div>";
             echo "</div>";
         } else {
             echo '<div class="p-3">

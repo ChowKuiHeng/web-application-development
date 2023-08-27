@@ -49,6 +49,18 @@
         // check if form was submitted
         if ($_POST) {
             try {
+                if (isset($_POST['delete_image'])) {
+                    $empty = "";
+                    $delete_query = "UPDATE customers
+                    SET image=:image  WHERE customers.id = :id";
+                    $delete_stmt = $con->prepare($delete_query);
+                    $delete_stmt->bindParam(":image", $empty);
+                    $delete_stmt->bindParam(":id", $id);
+                    $delete_stmt->execute();
+                    unlink($image);
+                    header("Location: customer_read_one.php?id={$id}");
+                }
+            else {
                 $query = "UPDATE customers SET firstname=:firstname, lastname=:lastname, gender=:gender, date_of_birth=:date_of_birth, account_status=:account_status, email=:email, image=:image";
                 // prepare query for excecution
                 $stmt = $con->prepare($query);
@@ -72,7 +84,7 @@
                 $target_file = $target_directory . $image;
                 //pathinfo找是不是.jpg,.png
                 $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
-                
+
                 $errors = array();
 
                 // now, if image is not empty, try to upload the image
@@ -85,20 +97,20 @@
                     }
                     // make sure submitted file is not too large, can't be larger than 1 MB
                     if ($_FILES['image']['size'] > (524288)) {
-                        $errors []= "<div>Image must be less than 512 KB in size.</div>";
+                        $errors[] = "<div>Image must be less than 512 KB in size.</div>";
                     }
                     if ($check == false) {
                         // make sure that file is a real image
-                        $errors []= "<div>Submitted file is not an image.</div>";
+                        $errors[] = "<div>Submitted file is not an image.</div>";
                     }
                     // make sure certain file types are allowed
                     $allowed_file_types = array("jpg", "jpeg", "png", "gif");
                     if (!in_array($file_type, $allowed_file_types)) {
-                        $errors []= "<div>Only JPG, JPEG, PNG, GIF files are allowed.</div>";
+                        $errors[] = "<div>Only JPG, JPEG, PNG, GIF files are allowed.</div>";
                     }
                     // make sure file does not exist
                     if (file_exists($target_file)) {
-                        $errors []= "<div>Image already exists. Try to change file name.</div>";
+                        $errors[] = "<div>Image already exists. Try to change file name.</div>";
                     }
                 }
 
@@ -151,15 +163,54 @@
                     $stmt->bindParam(':date_of_birth', $date_of_birth);
                     $stmt->bindParam(':email', $email);
                     $stmt->bindParam(':account_status', $account_status);
-                    $stmt->bindParam(':image', $image);
-                    // Execute the query
+                    if ($image == "") {
+                        $stmt->bindParam(":image", $row['image']);
+                    } else {
+                        $stmt->bindParam(':image', $target_file);
+                    }
+
                     if ($stmt->execute()) {
                         echo "<div class='alert alert-success'>Record was updated.</div>";
+                        // make sure the 'uploads' folder exists
+                        // if not, create it
+                        if ($image) {
+                            if ($target_file != $row['image'] && $row['image'] != "") {
+                                unlink($row['image']);
+                            }
+
+                            // make sure the 'uploads' folder exists
+                            // if not, create it
+                            if (!is_dir($target_directory)) {
+                                mkdir($target_directory, 0777, true);
+                            }
+                            // if $file_upload_error_messages is still empty
+                            if (empty($file_upload_error_messages)) {
+                                // it means there are no errors, so try to upload the file
+                                if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                    // it means photo was uploaded
+                                } else {
+                                    echo "<div class='alert alert-danger'>";
+                                    echo "<div>Unable to upload photo.</div>";
+                                    echo "<div>Update the record to upload photo.</div>";
+                                    echo "</div>";
+                                }
+                            }
+
+                            // if $file_upload_error_messages is NOT empty
+                            else {
+                                // it means there are some errors, so show them to user
+                                echo "<div class='alert alert-danger'>";
+                                echo "<div>{$file_upload_error_messages}</div>";
+                                echo "<div>Update the record to upload photo.</div>";
+                                echo "</div>";
+                            }
+                        }
                     } else {
                         echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
                     }
                 }
             }
+        }
             // show errors
             catch (PDOException $exception) {
                 //  die('ERROR: ' . $exception->getMessage());
@@ -235,13 +286,13 @@
                     <td>
                         <?php
                         if ($image != "") {
-                            echo '<img src="uploads/' . htmlspecialchars($image, ENT_QUOTES) . '" width="100">';
+                            echo '<img src="' . htmlspecialchars($image, ENT_QUOTES) . '" width="100">';
                         } else {
                             echo '<img src="img/customer_coming_soon.jpg" alt="image" width="100">';
                         }
                         ?>
                         <br>
-                        <input type="file" name="image" class="form-control-file">
+                        <input type="file" name="image" class="form-control-file" accept="image/*">
                     </td>
                 </tr>
                 <tr>
