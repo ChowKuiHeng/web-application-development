@@ -99,6 +99,9 @@
                 } else if ($expired_date <= $manufacture_date) {
                     $errors[] = "Expired date must be later than the manufacture date.";
                 }
+                if($manufacture_date > date('Y-m-d')){
+                    $errors[] = "Manufacture date cannot be greater than the current date.";
+                }
 
                 if (empty($expired_date)) {
                     $errors[] = "Expired Date is required.";
