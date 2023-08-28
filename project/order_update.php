@@ -117,7 +117,7 @@
         ?>
         <div>
             <form action="" method="post">
-                <input type="text" class="form-control-lg" value="<?php echo $customers[$order_summaries['customer_id'] - 1]['username'] ?>">
+                <input type="text" readonly class="form-control-lg" value="<?php echo $customers[$order_summaries['customer_id'] - 1]['username'] ?>">
                 <table class="table table-hover table-responsive table-bordered" id="row_del">
                     <tr>
                         <th>NO.</th>

@@ -299,7 +299,10 @@
                     <td></td>
                     <td>
                         <input type='submit' value='Save Changes' class='btn btn-primary' />
-                        <a href='customer_read.php' class='btn btn-danger'>Back to read customer</a>
+                        <?php if ($image != "") { ?>
+                            <input type="submit" value="Delete Image" class="btn btn-danger" name="delete_image">
+                        <?php } ?>
+                        <a href='customer_read.php' class='btn btn-info'>Back to read customers</a>
                     </td>
                 </tr>
             </table>
