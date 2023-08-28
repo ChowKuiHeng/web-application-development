@@ -112,6 +112,9 @@
                 if (empty($date_of_birth)) {
                     $errors[] = "Date of birth is required.";
                 }
+                if ($date_of_birth > date('Y-m-d')) {
+                    $errors[] = "Date of birth cannot be greater than the current date.";
+                }
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
                     foreach ($errors as $error) {

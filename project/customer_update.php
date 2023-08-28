@@ -137,6 +137,10 @@
                     $hashed_password = $password;
                 }
 
+                if($date_of_birth > date('Y-m-d')){
+                    $errors[] = "Date of birth cannot be greater than the current date.";
+                }
+
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $errors[] = "Invalid Email format.";
                 }
