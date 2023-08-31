@@ -114,7 +114,7 @@
         </div>
         <div class="container bg-dark bg-opacity-50 py-5">
             <h2 class="text-center text-white">An Overview of Our Product</h2>
-            <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="row row-cols-1 row-cols-md-2 g-4 ">
                 <div class="col">
                     <div class="border border-3 shadow p-4 text-center bg-white">
                         <h3>Top 5 Selling Products</h3>
@@ -141,7 +141,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="border border-3 shadow p-4 text-center bg-white">
+                    <div class="border border-3 shadow p-4 text-center bg-white" >
                         <h3>Products Never Purchased</h3>
                         <?php
                         $no_purchased_product_query = "SELECT id FROM products WHERE NOT EXISTS(SELECT product_id FROM order_details WHERE order_details.product_id=products.id)";
