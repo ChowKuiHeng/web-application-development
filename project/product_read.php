@@ -100,7 +100,6 @@
                     // Display promotion price if available
                     echo "<div class='text-decoration-line-through'> RM" . number_format($price,2) . "</div>";
                     echo 'RM'  . number_format($promotion_price, 2);
-                    echo "(Promotion Price)";
                 } else {
                     // Display regular price
                     echo 'RM'  . number_format($price, 2);

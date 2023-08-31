@@ -4,6 +4,8 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Update</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -77,7 +79,10 @@
                     $delete_stmt->bindParam(":id", $id);
                     $delete_stmt->execute();
                     unlink($image);
-                    header("Location: product_read_one.php?id={$id}");
+
+                    echo "<script>
+                    window.location.href = 'product_update.php?id={$id}';
+             </script>";
                 } else {
                     $query = "UPDATE products SET name=:name, description=:description, price=:price, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date,categories_name=:categories_name,image=:image WHERE id = :id";
                     // prepare query for excecution
@@ -105,11 +110,7 @@
                     // now, if image is not empty, try to upload the image
                     if ($image) {
                         $check = getimagesize($_FILES["image"]["tmp_name"]);
-                        $image_width = $check[0];
-                        $image_height = $check[1];
-                        if ($image_width != $image_height) {
-                            $errors[] = "Only square size image allowed.";
-                        }
+
                         // make sure submitted file is not too large, can't be larger than 1 MB
                         if ($_FILES['image']['size'] > (524288)) {
                             $errors[] = "<div>Image must be less than 512 KB in size.</div>";
@@ -122,6 +123,12 @@
                         $allowed_file_types = array("jpg", "jpeg", "png", "gif");
                         if (!in_array($file_type, $allowed_file_types)) {
                             $errors[] = "<div>Only JPG, JPEG, PNG, GIF files are allowed.</div>";
+                        } else {
+                            $image_width = $check[0];
+                            $image_height = $check[1];
+                            if ($image_width != $image_height) {
+                                $errors[] = "Only square size image allowed.";
+                            }
                         }
                         // make sure file does not exist
                         if (file_exists($target_file)) {
@@ -132,6 +139,8 @@
 
                     if (empty($name)) {
                         $errors[] = 'Product name is required.';
+                    } elseif (preg_match('/\d/', $name)) {
+                        $errors[] = 'Name cannot contain numeric values';
                     }
 
                     if (empty($description)) {
@@ -154,8 +163,8 @@
                     } elseif ($expired_date <= $manufacture_date) {
                         $errors[] = 'Expired date must be later than manufacture date.';
                     }
-                    
-                    if($manufacture_date > date('Y-m-d')){
+
+                    if ($manufacture_date > date('Y-m-d')) {
                         $errors[] = "Manufacture date cannot be greater than the current date.";
                     }
 
@@ -186,14 +195,16 @@
                         }
 
                         if ($stmt->execute()) {
-                            echo "<div class='alert alert-success'>Record was updated.</div>";
+                            echo "<script>
+                            window.location.href = 'product_read_one.php?id={$id}&action=record_updated';
+                          </script>";
                             // make sure the 'uploads' folder exists
                             // if not, create it
                             if ($image) {
                                 if ($target_file != $row['image'] && $row['image'] != "") {
                                     unlink($row['image']);
                                 }
-    
+
                                 // make sure the 'uploads' folder exists
                                 // if not, create it
                                 if (!is_dir($target_directory)) {
@@ -211,7 +222,7 @@
                                         echo "</div>";
                                     }
                                 }
-    
+
                                 // if $file_upload_error_messages is NOT empty
                                 else {
                                     // it means there are some errors, so show them to user
@@ -226,11 +237,11 @@
                         }
                     }
                 }
-                } catch (PDOException $exception) {
-                    echo "<div class='alert alert-danger'>Error: " . $exception->getMessage() . "</div>";
-                }
-            } 
-            ?>
+            } catch (PDOException $exception) {
+                echo "<div class='alert alert-danger'>Error: " . $exception->getMessage() . "</div>";
+            }
+        }
+        ?>
 
 
         <!-- PHP post to update record will be here -->

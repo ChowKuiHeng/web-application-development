@@ -4,6 +4,8 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Create</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -53,11 +55,7 @@
                     //pathinfo找是不是.jpg,.png
                     $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
                     $check = getimagesize($_FILES["image"]["tmp_name"]);
-                    $image_width = $check[0];
-                    $image_height = $check[1];
-                    if ($image_width != $image_height) {
-                        $errors[] = "Only square size image allowed.";
-                    }
+
                     // make sure submitted file is not too large, can't be larger than 1 MB
                     if ($_FILES['image']['size'] > (524288)) {
                         $errors[] = "<div>Image must be less than 512 KB in size.</div>";
@@ -70,6 +68,12 @@
                     $allowed_file_types = array("jpg", "jpeg", "png", "gif");
                     if (!in_array($file_type, $allowed_file_types)) {
                         $errors[] = "<div>Only JPG, JPEG, PNG, GIF files are allowed.</div>";
+                    } else {
+                        $image_width = $check[0];
+                        $image_height = $check[1];
+                        if ($image_width != $image_height) {
+                            $errors[] = "Only square size image allowed.";
+                        }
                     }
                     // make sure file does not exist
                     if (file_exists($target_file)) {
@@ -79,6 +83,8 @@
 
                 if (empty($name)) {
                     $errors[] = "Name is required.";
+                } elseif (preg_match('/\d/', $name)) {
+                    $errors[] = 'Name cannot contain numeric values';
                 }
                 if (empty($description)) {
                     $errors[] = "Description is required.";
@@ -99,7 +105,7 @@
                 } else if ($expired_date <= $manufacture_date) {
                     $errors[] = "Expired date must be later than the manufacture date.";
                 }
-                if($manufacture_date > date('Y-m-d')){
+                if ($manufacture_date > date('Y-m-d')) {
                     $errors[] = "Manufacture date cannot be greater than the current date.";
                 }
 

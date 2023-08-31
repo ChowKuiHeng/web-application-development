@@ -47,10 +47,14 @@
 
                 if (empty($categories_name)) {
                     $errors[] = 'Category name is required.';
+                }elseif (is_numeric($categories_name)) {
+                    $errors[] = "Categories Name cannot contain numeric values.";
                 }
 
                 if (empty($description)) {
                     $errors[] = 'Description is required.';
+                }elseif (is_numeric($description)) {
+                    $errors[] = "Description cannot contain numeric values.";
                 }
 
 

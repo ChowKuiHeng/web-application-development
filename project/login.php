@@ -8,13 +8,23 @@ if (isset($_SESSION['customer_id'])) {
 
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
-    <link rel="stylesheet" href="css/login.css"> 
+    <link rel="stylesheet" href="css/login.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        form {
+            background-image: url('../project/img/bluebg.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -92,14 +102,14 @@ if (isset($_SESSION['customer_id'])) {
 
         <!-- HTML form here where the product information will be entered -->
         <div class="container row justify-content-center align-items-center position-absolute top-50 start-50 translate-middle w-75">
-            <div class="col-md-6 text-center">
+            <div class="col text-center">
                 <img src="img/88speedmart.jpg" alt="88 Speedmart" class="img-fluid">
             </div>
             <div class="col">
                 <form action="" method="POST" class="d-flex flex-column">
                     <div class="form-group">
-                        <h1 style="color:#000000;">Welcome to 88 Speedmart</h1>
-                        <label for="username_enter" style="color:#000000; " >Username</label>
+                        <h2 style="color:#000000;">Welcome to 88 Speedmart</h2>
+                        <label for="username_enter" style="color:#000000; ">Username/Email</label>
                         <input type="text" name="username_enter" class="form-control border mb-3" id="username_enter">
 
                         <label for="password_enter" style="color:#000000;">Password</label>

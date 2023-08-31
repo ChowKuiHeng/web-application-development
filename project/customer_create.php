@@ -4,6 +4,8 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customers</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -57,11 +59,7 @@
                     //pathinfo找是不是.jpg,.png
                     $file_type = pathinfo($target_file, PATHINFO_EXTENSION);
                     $check = getimagesize($_FILES["image"]["tmp_name"]);
-                    $image_width = $check[0];
-                    $image_height = $check[1];
-                    if ($image_width != $image_height) {
-                        $errors[] = "Only square size image allowed.";
-                    }
+
                     // make sure submitted file is not too large, can't be larger than 1 MB
                     if ($_FILES['image']['size'] > (524288)) {
                         $errors[] = "<div>Image must be less than 512 KB in size.</div>";
@@ -74,6 +72,12 @@
                     $allowed_file_types = array("jpg", "jpeg", "png", "gif");
                     if (!in_array($file_type, $allowed_file_types)) {
                         $errors[] = "<div>Only JPG, JPEG, PNG, GIF files are allowed.</div>";
+                    } else {
+                        $image_width = $check[0];
+                        $image_height = $check[1];
+                        if ($image_width != $image_height) {
+                            $errors[] = "Only square size image allowed.";
+                        }
                     }
                     // make sure file does not exist
                     if (file_exists($target_file)) {
@@ -85,7 +89,10 @@
                     $errors[] = "Username is required.";
                 } elseif (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_-]{5,}$/', $username)) {
                     $errors[] = 'Invalid username format.';
+                } elseif (is_numeric($username)) {
+                    $errors[] = "Username cannot contain numeric values.";
                 }
+
                 if (empty($password)) {
                     $errors[] = "Password is required.";
                     if ($password !== $confirm_password) {
@@ -97,10 +104,15 @@
 
                 if (empty($firstname)) {
                     $errors[] = "Firstname is required.";
+                } elseif (preg_match('/\d/', $firstname)) {
+                    $errors[] = 'Firstname cannot contain numeric values';
                 }
                 if (empty($lastname)) {
                     $errors[] = "Lastname is required.";
+                } elseif (preg_match('/\d/', $lastname)) {
+                    $errors[] = 'Lastname cannot contain numeric values';
                 }
+
                 if (empty($email)) {
                     $errors[] = "Email is required.";
                 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

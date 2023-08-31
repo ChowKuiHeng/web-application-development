@@ -24,7 +24,7 @@
         $searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
         $query = "SELECT order_summary.order_id, customers.username,order_summary.order_date FROM order_summary INNER JOIN customers ON order_summary.customer_id = customers.id";
         if (!empty($searchKeyword)) {
-            $query .= " WHERE customers.firstname LIKE :keyword OR customers.lastname LIKE :keyword";
+            $query .= " WHERE customers.username LIKE :keyword";
             $searchKeyword = "%{$searchKeyword}%";
         }
         $query .= " ORDER BY order_summary.order_id ASC";
@@ -43,7 +43,7 @@
         echo '<div class="p-3">
             <form method="GET" action="">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="search" placeholder="Search customer name..." value="' . str_replace('%', '', $searchKeyword) . '">
+                    <input type="text" class="form-control" name="search" placeholder="Search username..." value="' . str_replace('%', '', $searchKeyword) . '">
                     <button class="btn btn-primary" type="submit">Search</button>
                 </div>
             </form>

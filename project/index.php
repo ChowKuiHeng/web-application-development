@@ -3,7 +3,8 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -141,25 +142,21 @@
                 </div>
                 <div class="col">
                     <div class="border border-3 shadow p-4 text-center bg-white">
-                        <h3>3 Products Never Purchased</h3>
+                        <h3>Products Never Purchased</h3>
                         <?php
                         $no_purchased_product_query = "SELECT id FROM products WHERE NOT EXISTS(SELECT product_id FROM order_details WHERE order_details.product_id=products.id)";
                         $no_purchased_product_stmt = $con->prepare($no_purchased_product_query);
                         $no_purchased_product_stmt->execute();
                         $no_purchased_products = $no_purchased_product_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                        for ($i = 0; $i < 3; $i++) {
-                            if (!empty($no_purchased_products[$i])) {
-                                $no_purchased_product_id = $no_purchased_products[$i]['id'];
-                                $no_purchased_product_name_query = "SELECT * FROM products WHERE id=?";
-                                $no_purchased_product_name_stmt = $con->prepare($no_purchased_product_name_query);
-                                $no_purchased_product_name_stmt->bindParam(1, $no_purchased_product_id);
-                                $no_purchased_product_name_stmt->execute();
-                                $no_purchased_product_name = $no_purchased_product_name_stmt->fetch(PDO::FETCH_ASSOC);
-                                echo "<p>" . $no_purchased_product_name['name'] . "</p>";
-                            } else {
-                                echo "";
-                            }
+                        foreach ($no_purchased_products as $product) {
+                            $no_purchased_product_id = $product['id'];
+                            $no_purchased_product_name_query = "SELECT * FROM products WHERE id=?";
+                            $no_purchased_product_name_stmt = $con->prepare($no_purchased_product_name_query);
+                            $no_purchased_product_name_stmt->bindParam(1, $no_purchased_product_id);
+                            $no_purchased_product_name_stmt->execute();
+                            $no_purchased_product_name = $no_purchased_product_name_stmt->fetch(PDO::FETCH_ASSOC);
+                            echo "<p>" . $no_purchased_product_name['name'] . "</p>";
                         }
                         ?>
                     </div>
