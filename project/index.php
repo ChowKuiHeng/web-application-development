@@ -112,54 +112,50 @@
                 </div>
             </div>
         </div>
-        <div class="container bg-dark bg-opacity-50 py-5">
-            <h2 class="text-center text-white">An Overview of Our Product</h2>
-            <div class="row row-cols-1 row-cols-md-2 g-4 ">
-                <div class="col">
-                    <div class="border border-3 shadow p-4 text-center bg-white">
-                        <h3>Top 5 Selling Products</h3>
-                        <?php
-                        $top_product_query = "SELECT product_id, SUM(quantity) AS total_quantity FROM order_details GROUP BY product_id ORDER BY total_quantity DESC";
-                        $top_product_stmt = $con->prepare($top_product_query);
-                        $top_product_stmt->execute();
-                        $top_products = $top_product_stmt->fetchAll(PDO::FETCH_ASSOC);
+        <div class="bg-dark bg-opacity-50">
+            <h2 class="text-center text-white pt-5">An Overview of Our Product</h2>
+            <div class="row m-auto gap-3 p-3 pt-0">
+                <div class="col border border-3 shadow p-4 text-center bg-white">
+                    <h3>Top 5 Selling Products</h3>
+                    <?php
+                    $top_product_query = "SELECT product_id, SUM(quantity) AS total_quantity FROM order_details GROUP BY product_id ORDER BY total_quantity DESC";
+                    $top_product_stmt = $con->prepare($top_product_query);
+                    $top_product_stmt->execute();
+                    $top_products = $top_product_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                        for ($i = 0; $i < 5; $i++) {
-                            if (!empty($top_products[$i])) {
-                                $top_product_id = $top_products[$i]['product_id'];
-                                $top_product_name_query = "SELECT * FROM products WHERE id=?";
-                                $top_product_name_stmt = $con->prepare($top_product_name_query);
-                                $top_product_name_stmt->bindParam(1, $top_product_id);
-                                $top_product_name_stmt->execute();
-                                $top_product_names = $top_product_name_stmt->fetch(PDO::FETCH_ASSOC);
-                                echo "<p>" . $top_product_names['name'] . " (" . $top_products[$i]['total_quantity'] . " SOLD)";
-                            } else {
-                                echo "";
-                            }
+                    for ($i = 0; $i < 5; $i++) {
+                        if (!empty($top_products[$i])) {
+                            $top_product_id = $top_products[$i]['product_id'];
+                            $top_product_name_query = "SELECT * FROM products WHERE id=?";
+                            $top_product_name_stmt = $con->prepare($top_product_name_query);
+                            $top_product_name_stmt->bindParam(1, $top_product_id);
+                            $top_product_name_stmt->execute();
+                            $top_product_names = $top_product_name_stmt->fetch(PDO::FETCH_ASSOC);
+                            echo "<p>" . $top_product_names['name'] . " (" . $top_products[$i]['total_quantity'] . " SOLD)";
+                        } else {
+                            echo "";
                         }
-                        ?>
-                    </div>
+                    }
+                    ?>
                 </div>
-                <div class="col">
-                    <div class="border border-3 shadow p-4 text-center bg-white" >
-                        <h3>Products Never Purchased</h3>
-                        <?php
-                        $no_purchased_product_query = "SELECT id FROM products WHERE NOT EXISTS(SELECT product_id FROM order_details WHERE order_details.product_id=products.id)";
-                        $no_purchased_product_stmt = $con->prepare($no_purchased_product_query);
-                        $no_purchased_product_stmt->execute();
-                        $no_purchased_products = $no_purchased_product_stmt->fetchAll(PDO::FETCH_ASSOC);
+                <div class="col border border-3 shadow p-4 text-center bg-white">
+                    <h3>Products Never Purchased</h3>
+                    <?php
+                    $no_purchased_product_query = "SELECT id FROM products WHERE NOT EXISTS(SELECT product_id FROM order_details WHERE order_details.product_id=products.id)";
+                    $no_purchased_product_stmt = $con->prepare($no_purchased_product_query);
+                    $no_purchased_product_stmt->execute();
+                    $no_purchased_products = $no_purchased_product_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                        foreach ($no_purchased_products as $product) {
-                            $no_purchased_product_id = $product['id'];
-                            $no_purchased_product_name_query = "SELECT * FROM products WHERE id=?";
-                            $no_purchased_product_name_stmt = $con->prepare($no_purchased_product_name_query);
-                            $no_purchased_product_name_stmt->bindParam(1, $no_purchased_product_id);
-                            $no_purchased_product_name_stmt->execute();
-                            $no_purchased_product_name = $no_purchased_product_name_stmt->fetch(PDO::FETCH_ASSOC);
-                            echo "<p>" . $no_purchased_product_name['name'] . "</p>";
-                        }
-                        ?>
-                    </div>
+                    foreach ($no_purchased_products as $product) {
+                        $no_purchased_product_id = $product['id'];
+                        $no_purchased_product_name_query = "SELECT * FROM products WHERE id=?";
+                        $no_purchased_product_name_stmt = $con->prepare($no_purchased_product_name_query);
+                        $no_purchased_product_name_stmt->bindParam(1, $no_purchased_product_id);
+                        $no_purchased_product_name_stmt->execute();
+                        $no_purchased_product_name = $no_purchased_product_name_stmt->fetch(PDO::FETCH_ASSOC);
+                        echo "<p>" . $no_purchased_product_name['name'] . "</p>";
+                    }
+                    ?>
                 </div>
             </div>
         </div>
