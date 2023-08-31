@@ -101,24 +101,27 @@ if (isset($_SESSION['customer_id'])) {
         ?>
 
         <!-- HTML form here where the product information will be entered -->
-        <div class="container row justify-content-center align-items-center position-absolute top-50 start-50 translate-middle w-75">
-            <div class="col text-center">
-                <img src="img/88speedmart.jpg" alt="88 Speedmart" class="img-fluid">
-            </div>
-            <div class="col">
-                <form action="" method="POST" class="d-flex flex-column">
-                    <div class="form-group">
-                        <h2 style="color:#000000;">Welcome to 88 Speedmart</h2>
-                        <label for="username_enter" style="color:#000000; ">Username/Email</label>
-                        <input type="text" name="username_enter" class="form-control border mb-3" id="username_enter">
+        <div class="container">
+            <div class="row justify-content-center align-items-center position-absolute top-50 start-50 translate-middle w-75">
+                <div class="col-md text-center">
+                    <img src="img/88speedmart.jpg" alt="88 Speedmart" class="img-fluid">
+                </div>
+                <div class="col-md">
+                    <form action="" method="POST" class="d-flex flex-column">
+                        <h2 class="text-center" style="color: #000000;">Welcome to 88 Speedmart</h2>
+                        <div class="form-group">
+                            <label for="username_enter" style="color: #000000;">Username/Email</label>
+                            <input type="text" name="username_enter" class="form-control border mb-3" id="username_enter">
 
-                        <label for="password_enter" style="color:#000000;">Password</label>
-                        <input type="password" name="password_enter" class="form-control border mb-3" id="password_enter">
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block w-25 mb-3">Login</button>
-                </form>
+                            <label for="password_enter" style="color: #000000;">Password</label>
+                            <input type="password" name="password_enter" class="form-control border mb-3" id="password_enter">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block w-25">Login</button>
+                    </form>
+                </div>
             </div>
         </div>
+
     </div>
 
     <!-- end .container -->

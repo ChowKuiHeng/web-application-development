@@ -83,8 +83,8 @@
 
                 if (empty($name)) {
                     $errors[] = "Name is required.";
-                } elseif (preg_match('/\d/', $name)) {
-                    $errors[] = 'Name cannot contain numeric values';
+                } elseif (is_numeric($name)) {
+                    $errors[] = 'Name cannot be a numeric value.';
                 }
                 if (empty($description)) {
                     $errors[] = "Description is required.";

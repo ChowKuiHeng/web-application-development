@@ -87,15 +87,19 @@
                     }
                 }
 
-                foreach ($quantity_array as $quantity) {
-                    if (empty($quantity)) {
-                        $errors[] = "Please fill in the quantity of products.";
-                    }
-                    if ($quantity == 0) {
-                        $errors[] = "Quantity cannot be zero.";
+                if (isset($selected_product_count)) {
+                    for ($i = 0; $i < $selected_product_count; $i++) {
+                        if ($product_id[$i] == "") {
+                            $errors[] = " Please choose the product for NO " . $i + 1 . ".";
+                        }
+
+                        if ($quantity_array[$i] == 0 || empty($quantity_array[$i])) {
+                            $errors[] = "Quantity cannot be zero.";
+                        } else if ($quantity_array[$i] < 0) {
+                            $errors[] = "Quantity cannot be negative number.";
+                        }
                     }
                 }
-
                 if (!empty($errors)) {
                     echo "<div class='alert alert-danger'>";
                     foreach ($errors as $error) {
