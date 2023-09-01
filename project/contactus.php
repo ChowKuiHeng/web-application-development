@@ -35,15 +35,16 @@
 
         if ($_POST) {
             try {
-
+                $customer = $_POST['customer'];
                 $email = $_POST['email'];
                 $phonenumber = $_POST['phonenumber'];
                 $message = $_POST['message'];
 
                 $errors = array();
 
-
-
+                if (empty($customer)) {
+                    $errors[] = "You need to select a username.";
+                } 
                 if (empty($email)) {
                     $errors[] = 'Email is required.';
                 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -67,11 +68,10 @@
                 } else {
                     $query = "INSERT INTO contact SET username = :username, email = :email, phonenumber = :phonenumber, message = :message";
                     $stmt = $con->prepare($query);
-                    $stmt->bindParam(':username', $username);
+                    $stmt->bindParam(':username', $customer);
                     $stmt->bindParam(':email', $email);
                     $stmt->bindParam(':phonenumber', $phonenumber);
                     $stmt->bindParam(':message', $message);
-
 
                     if ($stmt->execute()) {
                         echo "<div class='alert alert-success'>Record was saved.</div>";
@@ -92,7 +92,7 @@
                     <td>Username</td>
                     <td>
                         <select class="form-select" name="customer">
-                            <option value=''>Select a username</option>";
+                            <option value=''>Select a username</option>
                             <?php
                             // Fetch customers from the database
                             $query = "SELECT id, username FROM customers";
@@ -101,9 +101,9 @@
                             $customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             // Generate select options
-                            for ($x = 0; $x < count($customers); $x++) {
-                                $customer_selected = isset($_POST["customer"]) && $customers[$x]['id'] == $_POST["customer"] ? "selected" : "";
-                                echo "<option value='{$customers[$x]['id']}' $customer_selected>{$customers[$x]['username']}</option>";
+                            foreach ($customers as $customer) {
+                                $customer_selected = isset($_POST["customer"]) && $customer['id'] == $_POST["customer"] ? "selected" : "";
+                                echo "<option value='{$customer['id']}' $customer_selected>{$customer['username']}</option>";
                             }
                             ?>
                         </select>
@@ -112,7 +112,6 @@
                 <tr>
                     <td>Phone Number</td>
                     <td><input type="text" name="phonenumber" class="form-control" id="phonenumber"></td>
-
                 </tr>
                 <tr>
                     <td>Email</td>
@@ -121,20 +120,16 @@
                 <tr>
                     <td>Message</td>
                     <td><textarea class="form-control" name="message" id="message"></textarea></td>
-
                 </tr>
-
-                <td></td>
-                <td>
-                    <input type='submit' value='Save' class='btn btn-primary' />
-                    <a href='index.php' class='btn btn-danger'>Back to read products</a>
-                </td>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type='submit' value='Save' class='btn btn-primary' />
+                        <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                    </td>
                 </tr>
-
-
             </table>
         </form>
-
     </div>
     <!-- end .container -->
 
